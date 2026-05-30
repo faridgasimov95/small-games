@@ -3,18 +3,18 @@ import type { Game } from "@/types/game";
 const games: Game[] = [
   {
     id: "01",
-    name: "wordle",
-    difficulties: ["easy", "medium", "hard"],
+    name: "Wordle",
+    difficulties: ["Easy", "Medium", "Hard"],
   },
   {
     id: "02",
-    name: "hangman",
-    difficulties: ["easy", "medium", "hard"],
+    name: "Hangman",
+    difficulties: ["Easy", "Medium", "Hard"],
   },
   {
     id: "03",
-    name: "finder",
-    difficulties: ["easy", "medium", "hard"],
+    name: "Finder",
+    difficulties: ["Easy", "Medium", "Hard"],
   },
 ];
 
