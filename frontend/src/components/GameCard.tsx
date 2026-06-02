@@ -21,9 +21,9 @@ export default function GameCard({ game }: { game: Game }) {
         </span>
       </button>
       {expanded && (
-        <div className="flex flex-col gap-2">
+        <div className="flex flex-col gap-2 mt-3">
           <div className="flex gap-2">
-            <ul className="flex flex-col gap-1">
+            <ul className="flex flex-col gap-1 flex-1">
               {game.difficulties.map((d) => (
                 <li
                   key={d}
@@ -40,7 +40,8 @@ export default function GameCard({ game }: { game: Game }) {
                 </li>
               ))}
             </ul>
-            <ul className="flex flex-col gap-1">
+            <div className="w-px bg-border"></div>
+            <ul className="flex flex-col gap-1 flex-1">
               {game.modes.map((m) => (
                 <li
                   key={m}
@@ -63,7 +64,7 @@ export default function GameCard({ game }: { game: Game }) {
               navigate(`/${game.name}/${selectedDifficulty}/${selectedMode}`)
             }
             disabled={!selectedDifficulty || !selectedMode}
-            className="px-4 py-2 bg-accent text-bg font-pixel disabled:opacity-50 disabled:cursor-not-allowed transition-opacity"
+            className="w-full mt-2 px-4 py-2 bg-accent text-bg font-pixel disabled:opacity-50 disabled:cursor-not-allowed transition-opacity"
           >
             Play
           </button>
