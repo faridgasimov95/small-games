@@ -1,4 +1,5 @@
 import express from "express";
+import wordleRouter from "./routes/wordleRoutes";
 
 /**
  * Express App configuration.
@@ -11,5 +12,7 @@ app.use(express.json());
 app.get("/", (req, res) => {
   res.send("Small games API is running");
 });
+
+app.use("/wordle", wordleRouter);
 
 export default app;
