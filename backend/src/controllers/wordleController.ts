@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { getWord } from "../services/wordleService";
+import { getStats, getWord, saveStats } from "../services/wordleService";
 
 export const fetchWord = async (req: Request, res: Response): Promise<void> => {
   const difficulty = req.query.difficulty as string;
@@ -15,4 +15,21 @@ export const fetchWord = async (req: Request, res: Response): Promise<void> => {
   }
 };
 
-export function updateStats() {}
+export const updateStats = async (
+  req: Request,
+  res: Response,
+): Promise<void> => {
+  try {
+    const singleStats = req.body;
+    const globalStats = getStats();
+    saveStats(globalStats, singleStats);
+    res.send({ message: "Stats were saved successfully" });
+  } catch (e) {
+    if (e instanceof Error && e.message.includes("game-mode doesn't exist")) {
+      res.status(400).json({ error: e.message });
+    } else {
+      console.log(e);
+      res.status(500).json({ error: "Internal server error" });
+    }
+  }
+};
