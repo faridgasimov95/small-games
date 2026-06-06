@@ -3,8 +3,8 @@ import { fetchWord, updateStats } from "../controllers/wordleController";
 
 /**
  * Route for Wordle
- * GET api/account/patch - change user password.
- * POST api/auth/sign-in - delete user account.
+ * GET api/wordle/word - get random word.
+ * POST api/wordle/stats - update game's global statistics.
  */
 const router = Router();
 

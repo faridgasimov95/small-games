@@ -1,4 +1,4 @@
-import fs, { Stats } from "fs";
+import fs from "fs";
 import path from "path";
 import {
   DailyGameResult,
@@ -46,7 +46,7 @@ export const getWord = (difficulty: string): string => {
   return word;
 };
 
-function getGlobalWordleStats(): GlobalWordleStats {
+export const getGlobalWordleStats = (): GlobalWordleStats => {
   try {
     const stats = JSON.parse(
       fs.readFileSync(
@@ -59,14 +59,9 @@ function getGlobalWordleStats(): GlobalWordleStats {
   } catch (e) {
     throw new Error(`Failed to load wordleStats: ${e}`);
   }
-}
-
-export const getStats = (): GlobalWordleStats => {
-  const globalWordleStats = getGlobalWordleStats();
-  return globalWordleStats;
 };
 
-export const saveStats = (
+export const saveGlobalWordleStats = (
   globalStats: GlobalWordleStats,
   gameStats: DailyGameResult | EndlessGameResult,
 ) => {

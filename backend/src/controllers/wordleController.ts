@@ -1,5 +1,9 @@
 import { Request, Response } from "express";
-import { getStats, getWord, saveStats } from "../services/wordleService";
+import {
+  getGlobalWordleStats as getStats,
+  getWord,
+  saveGlobalWordleStats as saveStats,
+} from "../services/wordleService";
 
 export const fetchWord = async (req: Request, res: Response): Promise<void> => {
   const difficulty = req.query.difficulty as string;
