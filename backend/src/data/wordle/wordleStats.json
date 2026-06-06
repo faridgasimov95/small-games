@@ -1,0 +1,52 @@
+{
+  "daily": {
+    "2026-06-05": {
+      "easy": {
+        "attempts": [0, 0, 1, 0, 0, 0],
+        "solved": 1,
+        "total": 1
+      },
+      "medium": {
+        "attempts": [0, 0, 0, 0, 0, 0],
+        "solved": 0,
+        "total": 0
+      },
+      "hard": {
+        "attempts": [0, 0, 0, 0, 0, 0],
+        "solved": 0,
+        "total": 0
+      }
+    },
+    "2026-06-06": {
+      "easy": {
+        "attempts": [0, 0, 1, 0, 0, 0],
+        "solved": 1,
+        "total": 1
+      },
+      "medium": {
+        "attempts": [0, 0, 0, 0, 0, 0],
+        "solved": 0,
+        "total": 0
+      },
+      "hard": {
+        "attempts": [0, 0, 0, 0, 0, 0],
+        "solved": 0,
+        "total": 0
+      }
+    }
+  },
+  "endless": {
+    "easy": {
+      "totalStreak": 0,
+      "gamesPlayed": 0
+    },
+    "medium": {
+      "totalStreak": 0,
+      "gamesPlayed": 0
+    },
+    "hard": {
+      "totalStreak": 0,
+      "gamesPlayed": 0
+    }
+  }
+}

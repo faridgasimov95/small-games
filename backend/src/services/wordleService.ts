@@ -9,7 +9,10 @@ import {
 function loadWords(filename: string): string[] {
   try {
     const words = JSON.parse(
-      fs.readFileSync(path.join(__dirname, `../data/${filename}`), "utf-8"),
+      fs.readFileSync(
+        path.join(__dirname, `../data/wordle/${filename}`),
+        "utf-8",
+      ),
     );
     if (!words.length) throw new Error(`${filename} is empty`);
     return words;
@@ -47,7 +50,7 @@ function getGlobalWordleStats(): GlobalWordleStats {
   try {
     const stats = JSON.parse(
       fs.readFileSync(
-        path.join(__dirname, "../data/wordleStats.json"),
+        path.join(__dirname, "../data/wordle/wordleStats.json"),
         "utf-8",
       ),
     ) as GlobalWordleStats;
@@ -118,7 +121,7 @@ export const saveStats = (
     }
 
     fs.writeFileSync(
-      path.join(__dirname, "../data/wordleStats.json"),
+      path.join(__dirname, "../data/wordle/wordleStats.json"),
       JSON.stringify(newStats, null, 2),
       "utf-8",
     );
