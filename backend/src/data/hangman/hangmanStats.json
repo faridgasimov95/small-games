@@ -1,0 +1,8 @@
+{
+  "daily": {},
+  "endless": {
+    "easy": { "totalStreak": 0, "gamesPlayed": 0, "maxStreak": 0 },
+    "medium": { "totalStreak": 0, "gamesPlayed": 0, "maxStreak": 0 },
+    "hard": { "totalStreak": 0, "gamesPlayed": 0, "maxStreak": 0 }
+  }
+}
