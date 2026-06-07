@@ -1,0 +1,30 @@
+[
+  {
+    "letters": ["A", "O", "P", "S", "T"],
+    "words": ["atop", "past", "post", "soap", "stop", "pot", "tap", "top"]
+  },
+  {
+    "letters": ["B", "L", "A", "Z", "E"],
+    "words": ["blaze", "able", "bale", "zeal", "lab", "ale", "eel"]
+  },
+  {
+    "letters": ["C", "H", "A", "R", "M"],
+    "words": ["charm", "march", "harm", "car", "ham", "ram", "arc", "arm"]
+  },
+  {
+    "letters": ["D", "V", "E", "R", "I"],
+    "words": ["drive", "diver", "dive", "ride", "dire", "rid", "die", "red"]
+  },
+  {
+    "letters": ["F", "R", "O", "S", "T"],
+    "words": ["frost", "fort", "for", "rot", "ort"]
+  },
+  {
+    "letters": ["G", "L", "O", "V", "E"],
+    "words": ["glove", "love", "vole", "leg", "log", "ole", "lov"]
+  },
+  {
+    "letters": ["H", "O", "U", "S", "E"],
+    "words": ["house", "hose", "shoe", "sue", "use", "hue", "she"]
+  }
+]

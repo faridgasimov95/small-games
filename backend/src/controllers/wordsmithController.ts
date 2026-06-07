@@ -1,29 +1,32 @@
 import { Request, Response } from "express";
-import { saveGlobalHangmanStats as saveStats } from "../services/hangmanService";
+import { saveGlobalWordsmithStats as saveStats } from "../services/wordsmithService";
 import {
-  getRandom as getWord,
+  getRandom as getPuzzle,
   loadStats,
-  loadJson as loadWords,
+  loadJson as loadPuzzles,
 } from "../utils/wordUtils";
-import { GlobalHangmanStats } from "../types/hangman";
+import { GlobalWordsmithStats, Puzzle } from "../types/wordsmith";
 
-const wordsEasy = loadWords<string>("hangman", "easy.json");
-const wordsMedium = loadWords<string>("hangman", "medium.json");
-const wordsHard = loadWords<string>("hangman", "hard.json");
+const puzzlesEasy = loadPuzzles<Puzzle>("wordsmith", "easy.json");
+const puzzlesMedium = loadPuzzles<Puzzle>("wordsmith", "medium.json");
+const puzzlesHard = loadPuzzles<Puzzle>("wordsmith", "hard.json");
 
-const wordLists: Record<string, string[]> = {
-  easy: wordsEasy,
-  medium: wordsMedium,
-  hard: wordsHard,
+const puzzleLists: Record<string, Puzzle[]> = {
+  easy: puzzlesEasy,
+  medium: puzzlesMedium,
+  hard: puzzlesHard,
 };
 
-export const fetchWord = async (req: Request, res: Response): Promise<void> => {
+export const fetchPuzzle = async (
+  req: Request,
+  res: Response,
+): Promise<void> => {
   const difficulty = req.query.difficulty as string;
   try {
-    const words = wordLists[difficulty];
+    const words = puzzleLists[difficulty];
     if (!words) throw new Error(`Invalid difficulty: ${difficulty}`);
-    const word = getWord(words);
-    res.send(word);
+    const puzzle = getPuzzle(words);
+    res.send(puzzle);
   } catch (e) {
     if (e instanceof Error && e.message.includes("Invalid difficulty")) {
       res.status(400).json({ error: e.message });
@@ -39,8 +42,8 @@ export const updateStats = async (
 ): Promise<void> => {
   try {
     const singleStats = req.body;
-    const globalStats = loadStats<GlobalHangmanStats>(
-      "../data/hangman/hangmanStats.json",
+    const globalStats = loadStats<GlobalWordsmithStats>(
+      "../data/wordsmith/wordsmithStats.json",
     );
     saveStats(globalStats, singleStats);
     res.send({ message: "Stats were saved successfully" });

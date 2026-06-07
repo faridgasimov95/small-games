@@ -1,11 +1,15 @@
 import { Request, Response } from "express";
 import { saveGlobalWordleStats as saveStats } from "../services/wordleService";
-import { getWord, loadStats, loadWords } from "../utils/wordUtils";
+import {
+  getRandom as getWord,
+  loadStats,
+  loadJson as loadWords,
+} from "../utils/wordUtils";
 import { GlobalWordleStats } from "../types/wordle";
 
-const wordsEasy = loadWords("wordle", "words5.json");
-const wordsMedium = loadWords("wordle", "words6.json");
-const wordsHard = loadWords("wordle", "words7.json");
+const wordsEasy = loadWords<string>("wordle", "easy.json");
+const wordsMedium = loadWords<string>("wordle", "medium.json");
+const wordsHard = loadWords<string>("wordle", "hard.json");
 
 const wordLists: Record<string, string[]> = {
   easy: wordsEasy,

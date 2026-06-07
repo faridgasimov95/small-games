@@ -1,0 +1,22 @@
+[
+  {
+    "letters": ["A", "E", "P", "R"],
+    "words": ["pear", "reap", "ape", "pea", "rap", "are", "ear", "era"]
+  },
+  {
+    "letters": ["D", "U", "N", "E"],
+    "words": ["dune", "due", "den", "end", "nun", "nut"]
+  },
+  {
+    "letters": ["F", "R", "A", "T"],
+    "words": ["fart", "raft", "fat", "rat", "art", "far"]
+  },
+  {
+    "letters": ["T", "O", "E", "N"],
+    "words": ["note", "tone", "one", "eon", "net", "ten", "ton", "toe", "not"]
+  },
+  {
+    "letters": ["C", "P", "A", "E"],
+    "words": ["cape", "pace", "cap", "ace", "ape", "pea"]
+  }
+]

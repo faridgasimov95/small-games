@@ -14,7 +14,7 @@ export type EndlessGameResult = {
   streak: number;
 };
 
-export type DifficultyStats = {
+export type DailyStats = {
   attempts: number[];
   solved: number;
   total: number;
@@ -29,9 +29,9 @@ export type EndlessStats = {
 export type GlobalWordleStats = {
   daily: {
     [date: string]: {
-      easy: DifficultyStats;
-      medium: DifficultyStats;
-      hard: DifficultyStats;
+      easy: DailyStats;
+      medium: DailyStats;
+      hard: DailyStats;
     };
   };
   endless: {

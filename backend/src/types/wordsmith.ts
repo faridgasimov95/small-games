@@ -1,10 +1,14 @@
 export type Difficulty = "easy" | "medium" | "hard";
 
+export type Puzzle = {
+  letters: string[];
+  words: string[];
+};
+
 export type DailyGameResult = {
   mode: "daily";
   difficulty: Difficulty;
-  solved: boolean;
-  mistakes: number;
+  time: number;
   date: string;
 };
 
@@ -15,8 +19,7 @@ export type EndlessGameResult = {
 };
 
 export type DailyStats = {
-  mistakes: number[];
-  solved: number;
+  top10Times: number[];
   total: number;
 };
 
@@ -26,7 +29,7 @@ export type EndlessStats = {
   maxStreak: number;
 };
 
-export type GlobalHangmanStats = {
+export type GlobalWordsmithStats = {
   daily: {
     [date: string]: {
       easy: DailyStats;

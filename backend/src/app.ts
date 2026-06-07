@@ -1,6 +1,7 @@
 import express from "express";
 import wordleRouter from "./routes/wordleRoutes";
 import hangmanRouter from "./routes/hangmanRoutes";
+import wordsmithRouter from "./routes/wordsmithRoutes";
 
 /**
  * Express App configuration.
@@ -16,5 +17,6 @@ app.get("/", (req, res) => {
 
 app.use("/wordle", wordleRouter);
 app.use("/hangman", hangmanRouter);
+app.use("/wordsmith", wordsmithRouter);
 
 export default app;

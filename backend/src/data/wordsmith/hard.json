@@ -1,0 +1,116 @@
+[
+  {
+    "letters": ["A", "E", "P", "R", "S", "T"],
+    "words": [
+      "paster",
+      "parse",
+      "paste",
+      "spare",
+      "strap",
+      "taper",
+      "stare",
+      "part",
+      "pest",
+      "pear",
+      "tape",
+      "trap",
+      "rate",
+      "star",
+      "tear",
+      "seat"
+    ]
+  },
+  {
+    "letters": ["B", "R", "I", "G", "H", "T"],
+    "words": ["bright", "right", "girth", "grit", "brit", "rig"]
+  },
+  {
+    "letters": ["C", "H", "I", "L", "D", "E"],
+    "words": [
+      "chide",
+      "chile",
+      "child",
+      "lice",
+      "dice",
+      "hide",
+      "held",
+      "idle",
+      "lied",
+      "lid",
+      "die",
+      "eld"
+    ]
+  },
+  {
+    "letters": ["D", "R", "E", "A", "M", "S"],
+    "words": [
+      "dream",
+      "smear",
+      "dram",
+      "dare",
+      "dear",
+      "mare",
+      "read",
+      "seam",
+      "mad",
+      "mar",
+      "ram",
+      "red"
+    ]
+  },
+  {
+    "letters": ["F", "L", "I", "G", "H", "T"],
+    "words": [
+      "flight",
+      "filth",
+      "light",
+      "gilt",
+      "lift",
+      "git",
+      "fig",
+      "fit",
+      "hit",
+      "lit"
+    ]
+  },
+  {
+    "letters": ["G", "R", "A", "N", "I", "T"],
+    "words": [
+      "grain",
+      "gratin",
+      "giant",
+      "anti",
+      "gain",
+      "gait",
+      "grin",
+      "rain",
+      "rant",
+      "air",
+      "ant",
+      "art",
+      "ran",
+      "rat",
+      "rig",
+      "tan",
+      "tar"
+    ]
+  },
+  {
+    "letters": ["H", "A", "R", "V", "E", "S"],
+    "words": [
+      "shave",
+      "share",
+      "shear",
+      "hare",
+      "have",
+      "hear",
+      "rave",
+      "rave",
+      "eras",
+      "her",
+      "are",
+      "ear",
+      "era"
+    ]
+  }
+]
