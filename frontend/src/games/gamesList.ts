@@ -15,7 +15,7 @@ const games: Game[] = [
   },
   {
     id: "03",
-    name: "Finder",
+    name: "Wordsmith",
     difficulties: ["Easy", "Medium", "Hard"],
     modes: ["Daily", "Endless"],
   },
