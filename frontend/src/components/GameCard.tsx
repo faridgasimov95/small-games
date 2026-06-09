@@ -10,7 +10,7 @@ export default function GameCard({ game }: { game: Game }) {
   const navigate = useNavigate();
 
   return (
-    <div className="bg-surface rounded-sm px-4 py-3 border border-border border-x-4 border-x-accent hover:bg-surface-hover transition-colors ">
+    <div className="bg-surface rounded-sm px-4 py-3 border border-divider border-x-4 border-x-accent hover:bg-surface-hover transition-colors ">
       <button
         onClick={() => setExpanded((prev) => !prev)}
         className="w-full text-left flex gap-1 justify-between"
