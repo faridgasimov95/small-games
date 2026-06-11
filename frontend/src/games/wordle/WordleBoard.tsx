@@ -13,6 +13,7 @@ export default function WordleBoard({
   const wordLength = hiddenWord.length;
   const [guesses, setGuesses] = useState<string[]>([]);
   const [currentGuess, setCurrentGuess] = useState("");
+  const [shakingRow, setShakingRow] = useState<number | null>(null);
 
   useEffect(() => {
     async function handleKeyDown(e: KeyboardEvent) {
@@ -26,7 +27,8 @@ export default function WordleBoard({
             `https://api.dictionaryapi.dev/api/v2/entries/en/${currentGuess}`,
           );
           if (!response.ok) {
-            // shaking animation
+            setShakingRow(guesses.length);
+            setTimeout(() => setShakingRow(null), 1000);
             return;
           }
         } catch (err) {
@@ -57,6 +59,7 @@ export default function WordleBoard({
           {...(guesses[attempt]
             ? { isSubmitted: true, hiddenWord }
             : { isSubmitted: false })}
+          isShaking={attempt === shakingRow}
         />
       ))}
     </div>
