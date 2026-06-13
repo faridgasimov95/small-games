@@ -7,7 +7,7 @@ import {
 
 export async function wordleLoader({ params }: LoaderFunctionArgs) {
   const response = await fetch(
-    `http://localhost:3000/wordle/word?difficulty=${params.difficulty}`,
+    `http://localhost:3000/wordle/word?difficulty=${params.difficulty?.toLowerCase()}`,
   );
   const word = await response.text();
   return { word };
