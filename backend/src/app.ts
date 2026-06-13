@@ -1,4 +1,5 @@
 import express from "express";
+import cors from "cors";
 import wordleRouter from "./routes/wordleRoutes";
 import hangmanRouter from "./routes/hangmanRoutes";
 import wordsmithRouter from "./routes/wordsmithRoutes";
@@ -10,6 +11,7 @@ import wordsmithRouter from "./routes/wordsmithRoutes";
 const app = express();
 
 app.use(express.json());
+app.use(cors());
 
 app.get("/", (req, res) => {
   res.send("Small games API is running");
