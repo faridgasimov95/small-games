@@ -11,6 +11,12 @@
   --color-divider: #3c1459;
   --color-accent: #fbbf24;
   --color-text: #e9d5ff;
+  --color-tile-correct: #22c55e;
+  --color-tile-present: #eab308;
+  --color-tile-absent: #27272a;
+  --color-tile-empty: #1a0a2e;
+  --color-tile-text-dark: #1a1a1a;
+  --color-tile-text-light: #e9d5ff;
 }
 
 @keyframes shake {
