@@ -20,11 +20,11 @@ function getStatuses(guessedWord: string, hiddenWord: string): LetterStatus[] {
   const len = guessedWord.length;
   const statuses: LetterStatus[] = new Array(len).fill("absent");
 
-  const guess = guessedWord.toLowerCase().split("");
-  const hidden = hiddenWord.toLowerCase().split("");
+  const guess = guessedWord.split("");
+  const hidden = hiddenWord.split("");
 
   for (let i = 0; i < len; i++) {
-    if (guess[i].toLowerCase() === hidden[i]) {
+    if (guess[i] === hidden[i]) {
       statuses[i] = "correct";
       hidden[i] = "";
       guess[i] = "";

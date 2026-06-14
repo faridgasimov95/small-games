@@ -5,14 +5,14 @@ type WordleBoardProps = {
   hiddenWord: string;
   initialGuesses: string[];
   readOnly: boolean;
-  onGameEnd: (guesses: string[]) => void;
+  onGuessSubmit: (guesses: string[]) => void;
 };
 
 export default function WordleBoard({
   hiddenWord,
   initialGuesses,
   readOnly,
-  onGameEnd,
+  onGuessSubmit,
 }: WordleBoardProps) {
   const wordLength = hiddenWord.length;
   const [guesses, setGuesses] = useState<string[]>(initialGuesses);
@@ -24,7 +24,7 @@ export default function WordleBoard({
 
     async function handleKeyDown(e: KeyboardEvent) {
       if (/^[a-zA-Z]$/.test(e.key) && currentGuess.length < wordLength) {
-        setCurrentGuess((prev) => prev + e.key.toUpperCase());
+        setCurrentGuess((prev) => prev + e.key.toLowerCase());
       } else if (e.key === "Backspace" && currentGuess.length > 0) {
         setCurrentGuess((prev) => prev.slice(0, -1));
       } else if (e.key === "Enter" && currentGuess.length === wordLength) {
@@ -44,12 +44,7 @@ export default function WordleBoard({
 
         setGuesses((prev) => [...prev, currentGuess]);
         setCurrentGuess("");
-        if (
-          currentGuess.toLowerCase() === hiddenWord ||
-          guesses.length + 1 >= 6
-        ) {
-          onGameEnd([...guesses, currentGuess]);
-        }
+        onGuessSubmit([...guesses, currentGuess]);
       }
     }
 

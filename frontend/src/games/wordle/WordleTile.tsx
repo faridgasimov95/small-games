@@ -29,7 +29,7 @@ export default function WordleTile({
     <div
       className={`flex justify-center items-center w-16 h-16 border border-divider ${bgColor} ${textColor}`}
     >
-      {letter || ""}
+      {letter.toUpperCase() || ""}
     </div>
   );
 }

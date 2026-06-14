@@ -1,4 +1,5 @@
 import WordleBoard from "@/games/wordle/WordleBoard";
+import { useState } from "react";
 import {
   useLoaderData,
   useParams,
@@ -7,7 +8,7 @@ import {
 
 type WordleLoaderData = {
   hiddenWord: string;
-  guesses: string[] | null;
+  guesses: string[];
 };
 
 export async function wordleLoader({
@@ -19,7 +20,7 @@ export async function wordleLoader({
     const savedResult = localStorage.getItem(storageKey);
     if (savedResult) {
       const { guesses, hiddenWord } = JSON.parse(savedResult);
-      return { hiddenWord, guesses };
+      return { hiddenWord, guesses: guesses };
     }
   }
 
@@ -27,14 +28,19 @@ export async function wordleLoader({
     `http://localhost:3000/wordle/word?difficulty=${params.difficulty?.toLowerCase()}`,
   );
   const hiddenWord = await response.text();
-  return { hiddenWord, guesses: null };
+  return { hiddenWord, guesses: [] };
 }
 
 export default function WordlePage() {
   const params = useParams();
   const { hiddenWord, guesses } = useLoaderData() as WordleLoaderData;
+  const [currentGuesses, setCurrentGuesses] = useState(guesses);
+  const readOnly =
+    currentGuesses.length === 6 ||
+    currentGuesses[currentGuesses.length - 1] === hiddenWord;
 
-  function handleGameEnd(guesses: string[]) {
+  function handleGuessSubmit(guesses: string[]) {
+    setCurrentGuesses(guesses);
     if (params.mode === "daily") {
       const today = new Date().toISOString().split("T")[0];
       const storageKey = `wordle-daily-${params.difficulty}-${today}`;
@@ -45,9 +51,9 @@ export default function WordlePage() {
   return (
     <WordleBoard
       hiddenWord={hiddenWord}
-      initialGuesses={guesses ?? []}
-      readOnly={!!guesses}
-      onGameEnd={handleGameEnd}
+      initialGuesses={guesses}
+      readOnly={readOnly}
+      onGuessSubmit={handleGuessSubmit}
     />
   );
 }
