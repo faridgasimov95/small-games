@@ -6,22 +6,43 @@ type WordleRowProps =
       isSubmitted: true;
       hiddenWord: string;
       isShaking: boolean;
+      wordLength: number;
     }
   | {
       guessedWord: string;
       isSubmitted: false;
       hiddenWord?: never;
       isShaking: boolean;
+      wordLength: number;
     };
 
-function defineStatus(
-  hiddenWord: string,
-  letter: string,
-  index: number,
-): LetterStatus {
-  if (letter === hiddenWord[index]) return "correct";
-  if (hiddenWord.includes(letter)) return "present";
-  return "absent";
+function getStatuses(guessedWord: string, hiddenWord: string): LetterStatus[] {
+  const len = guessedWord.length;
+  const statuses: LetterStatus[] = new Array(len).fill("absent");
+
+  const guess = guessedWord.toLowerCase().split("");
+  const hidden = hiddenWord.toLowerCase().split("");
+
+  for (let i = 0; i < len; i++) {
+    if (guess[i].toLowerCase() === hidden[i]) {
+      statuses[i] = "correct";
+      hidden[i] = "";
+      guess[i] = "";
+    }
+  }
+
+  for (let i = 0; i < len; i++) {
+    if (guess[i] === "") continue;
+
+    const targetIndex = hidden.indexOf(guess[i]);
+    if (targetIndex !== -1) {
+      statuses[i] = "present";
+      hidden[targetIndex] = "";
+    } else {
+      statuses[i] = "absent";
+    }
+  }
+  return statuses;
 }
 
 export default function WordleRow({
@@ -29,17 +50,22 @@ export default function WordleRow({
   hiddenWord,
   isSubmitted,
   isShaking,
+  wordLength,
 }: WordleRowProps) {
+  const statuses = isSubmitted ? getStatuses(guessedWord, hiddenWord) : [];
+
   return (
-    <div className={`flex gap-2 ${isShaking ? "animate-shake" : ""}`}>
-      {guessedWord.split("").map((letter, i) => (
-        <WordleTile
-          key={i}
-          letter={letter}
-          status={isSubmitted ? defineStatus(hiddenWord, letter, i) : null}
-          revealDelay={i * 100}
-        ></WordleTile>
-      ))}
+    <div className={`flex gap-1 ${isShaking ? "animate-shake" : ""}`}>
+      {Array.from({ length: wordLength }, (_, i) => guessedWord[i] ?? "").map(
+        (letter, i) => (
+          <WordleTile
+            key={i}
+            letter={letter}
+            status={isSubmitted ? statuses[i] : null}
+            revealDelay={i * 100}
+          ></WordleTile>
+        ),
+      )}
     </div>
   );
 }

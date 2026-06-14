@@ -13,17 +13,23 @@ export default function WordleTile({
 }: WordleTileProps) {
   const bgColor =
     status === "correct"
-      ? "bg-accent"
+      ? "bg-tile-correct"
       : status === "present"
-        ? "bg-surface-card"
+        ? "bg-tile-present"
         : status === "absent"
-          ? "bg-surface"
-          : "bg-gray-100";
+          ? "bg-tile-absent"
+          : "bg-tile-empty";
+
+  const textColor =
+    status === "correct" || status === "present"
+      ? "text-tile-text-dark"
+      : "text-tile-text-light";
+
   return (
     <div
-      className={`flex justify-center items-center w-16 h-16 border border-divider ${bgColor}`}
+      className={`flex justify-center items-center w-16 h-16 border border-divider ${bgColor} ${textColor}`}
     >
-      {letter || "_"}
+      {letter || ""}
     </div>
   );
 }

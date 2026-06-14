@@ -51,15 +51,18 @@ export default function WordleBoard({
   }, [currentGuess, wordLength]);
 
   return (
-    <div>
+    <div className="flex flex-col gap-2">
       {Array.from({ length: 6 }, (_, i) => i).map((attempt) => (
         <WordleRow
           key={attempt}
-          guessedWord={guesses[attempt] ?? ""}
+          guessedWord={
+            guesses[attempt] ?? (attempt === guesses.length ? currentGuess : "")
+          }
           {...(guesses[attempt]
             ? { isSubmitted: true, hiddenWord }
             : { isSubmitted: false })}
           isShaking={attempt === shakingRow}
+          wordLength={wordLength}
         />
       ))}
     </div>
