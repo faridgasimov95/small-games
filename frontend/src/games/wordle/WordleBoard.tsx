@@ -3,19 +3,25 @@ import WordleRow from "./WordleRow";
 
 type WordleBoardProps = {
   hiddenWord: string;
-  onGameEnd: (won: boolean) => void;
+  initialGuesses: string[];
+  readOnly: boolean;
+  onGameEnd: (guesses: string[]) => void;
 };
 
 export default function WordleBoard({
   hiddenWord,
+  initialGuesses,
+  readOnly,
   onGameEnd,
 }: WordleBoardProps) {
   const wordLength = hiddenWord.length;
-  const [guesses, setGuesses] = useState<string[]>([]);
+  const [guesses, setGuesses] = useState<string[]>(initialGuesses);
   const [currentGuess, setCurrentGuess] = useState("");
   const [shakingRow, setShakingRow] = useState<number | null>(null);
 
   useEffect(() => {
+    if (readOnly) return;
+
     async function handleKeyDown(e: KeyboardEvent) {
       if (/^[a-zA-Z]$/.test(e.key) && currentGuess.length < wordLength) {
         setCurrentGuess((prev) => prev + e.key.toUpperCase());
@@ -38,17 +44,18 @@ export default function WordleBoard({
 
         setGuesses((prev) => [...prev, currentGuess]);
         setCurrentGuess("");
-        if (currentGuess === hiddenWord) {
-          onGameEnd(true);
-        } else if (guesses.length + 1 >= 6) {
-          onGameEnd(false);
+        if (
+          currentGuess.toLowerCase() === hiddenWord ||
+          guesses.length + 1 >= 6
+        ) {
+          onGameEnd([...guesses, currentGuess]);
         }
       }
     }
 
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [currentGuess, wordLength]);
+  }, [currentGuess, wordLength, readOnly]);
 
   return (
     <div className="flex flex-col gap-2">

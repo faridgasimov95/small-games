@@ -9,6 +9,13 @@ export default function GameCard({ game }: { game: Game }) {
   const [selectedMode, setSelectedMode] = useState<Mode | null>(null);
   const navigate = useNavigate();
 
+  function handlePlay() {
+    if (!selectedDifficulty || !selectedMode) return;
+    navigate(
+      `/${game.name.toLowerCase()}/${selectedDifficulty.toLowerCase()}/${selectedMode.toLowerCase()}`,
+    );
+  }
+
   return (
     <div className="bg-surface rounded-sm px-4 py-3 border border-divider border-x-4 border-x-accent hover:bg-surface-hover transition-colors ">
       <button
@@ -60,9 +67,7 @@ export default function GameCard({ game }: { game: Game }) {
             </ul>
           </div>
           <button
-            onClick={() =>
-              navigate(`/${game.name}/${selectedDifficulty}/${selectedMode}`)
-            }
+            onClick={handlePlay}
             disabled={!selectedDifficulty || !selectedMode}
             className="w-full mt-2 px-4 py-2 bg-accent text-bg font-pixel disabled:opacity-50 disabled:cursor-not-allowed transition-opacity"
           >
