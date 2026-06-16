@@ -49,11 +49,16 @@ export default function WordlePage() {
   }
 
   return (
-    <WordleBoard
-      hiddenWord={hiddenWord}
-      initialGuesses={guesses}
-      readOnly={readOnly}
-      onGuessSubmit={handleGuessSubmit}
-    />
+    <div className="flex flex-col gap-2 min-h-screen items-center pt-10">
+      <h1>
+        Wordle - {params.mode} - {params.difficulty}
+      </h1>
+      <WordleBoard
+        hiddenWord={hiddenWord}
+        initialGuesses={guesses}
+        readOnly={readOnly}
+        onGuessSubmit={handleGuessSubmit}
+      />
+    </div>
   );
 }
