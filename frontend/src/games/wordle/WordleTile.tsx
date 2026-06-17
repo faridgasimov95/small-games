@@ -27,7 +27,8 @@ export default function WordleTile({
 
   return (
     <div
-      className={`flex justify-center items-center w-16 h-16 border border-divider ${bgColor} ${textColor}`}
+      className={`flex justify-center items-center w-16 h-16 border border-divider ${bgColor} ${textColor} ${status ? "animate-flip" : ""}`}
+      style={{ "--delay": `${revealDelay}ms` } as React.CSSProperties}
     >
       {letter.toUpperCase() || ""}
     </div>

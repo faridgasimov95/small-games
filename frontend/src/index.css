@@ -43,3 +43,27 @@
 .animate-shake {
   animation: shake 0.4s ease;
 }
+
+@keyframes flipIn {
+  0% {
+    transform: rotateX(0deg);
+  }
+  100% {
+    transform: rotateX(90deg);
+  }
+}
+
+@keyframes flipOut {
+  0% {
+    transform: rotateX(90deg);
+  }
+  100% {
+    transform: rotateX(0deg);
+  }
+}
+
+.animate-flip {
+  animation:
+    flipIn 0.5s ease var(--delay) forwards,
+    flipOut 0.5s ease calc(var(--delay) + 250ms) forwards;
+}
