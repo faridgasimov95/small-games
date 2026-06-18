@@ -1,3 +1,5 @@
+import { useEffect, useState } from "react";
+
 export type LetterStatus = "correct" | "present" | "absent" | null;
 
 type WordleTileProps = {
@@ -6,24 +8,36 @@ type WordleTileProps = {
   revealDelay: number;
 };
 
+const STATUS_STYLES = {
+  correct: { bg: "bg-tile-correct", text: "text-tile-text-dark" },
+  present: { bg: "bg-tile-present", text: "text-tile-text-dark" },
+  absent: { bg: "bg-tile-absent", text: "text-tile-text-light" },
+} as const;
+
 export default function WordleTile({
   letter,
   status,
   revealDelay,
 }: WordleTileProps) {
-  const bgColor =
-    status === "correct"
-      ? "bg-tile-correct"
-      : status === "present"
-        ? "bg-tile-present"
-        : status === "absent"
-          ? "bg-tile-absent"
-          : "bg-tile-empty";
+  const [revealed, setRevealed] = useState(false);
 
+  useEffect(() => {
+    if (!status) {
+      setRevealed(false);
+      return;
+    }
+
+    const timer = setTimeout(() => {
+      setRevealed(true);
+    }, revealDelay + 250);
+
+    return () => clearTimeout(timer);
+  }, [status, revealDelay]);
+
+  const bgColor =
+    revealed && status ? STATUS_STYLES[status].bg : "bg-tile-empty";
   const textColor =
-    status === "correct" || status === "present"
-      ? "text-tile-text-dark"
-      : "text-tile-text-light";
+    revealed && status ? STATUS_STYLES[status].text : "text-tile-text-light";
 
   return (
     <div
