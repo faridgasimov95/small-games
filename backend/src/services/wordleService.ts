@@ -25,10 +25,11 @@ export const saveGlobalWordleStats = (
           [gameStats.date]: {
             ...existingDay,
             [gameStats.difficulty]: {
-              attempts: existingDay[gameStats.difficulty].attempts.map(
-                (count, i) =>
-                  i === gameStats.attempts - 1 ? count + 1 : count,
-              ),
+              attempts: gameStats.solved
+                ? existingDay[gameStats.difficulty].attempts.map((count, i) =>
+                    i === gameStats.attempts! - 1 ? count + 1 : count,
+                  )
+                : existingDay[gameStats.difficulty].attempts,
               solved:
                 existingDay[gameStats.difficulty].solved +
                 Number(gameStats.solved),

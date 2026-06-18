@@ -4,7 +4,7 @@ export type DailyGameResult = {
   mode: "daily";
   difficulty: Difficulty;
   solved: boolean;
-  attempts: number;
+  attempts?: number;
   date: string;
 };
 
