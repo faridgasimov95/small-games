@@ -39,12 +39,39 @@ export default function WordlePage() {
     currentGuesses.length === 6 ||
     currentGuesses[currentGuesses.length - 1] === hiddenWord;
 
-  function handleGuessSubmit(guesses: string[]) {
+  async function handleGuessSubmit(guesses: string[]) {
     setCurrentGuesses(guesses);
     if (params.mode === "daily") {
       const today = new Date().toISOString().split("T")[0];
       const storageKey = `wordle-daily-${params.difficulty}-${today}`;
       localStorage.setItem(storageKey, JSON.stringify({ guesses, hiddenWord }));
+
+      const solved = guesses[guesses.length - 1] === hiddenWord;
+      const gameOver = solved || guesses.length === 6;
+
+      if (gameOver) {
+        try {
+          const response = await fetch("http://localhost:3000/wordle/stats", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              mode: "daily",
+              difficulty: params.difficulty,
+              solved,
+              date: today,
+              ...(solved && { attempts: guesses.length }),
+            }),
+          });
+
+          if (!response.ok) {
+            console.error("Failed to save stats:", await response.json());
+          }
+        } catch (err) {
+          console.error("Failed to save stats:", err);
+        }
+      }
     }
   }
 
