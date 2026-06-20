@@ -92,35 +92,51 @@ export default function WordlePage() {
       }
     } else if (params.mode === "endless") {
       const storageKey = `wordle-endless-${params.difficulty}`;
-      localStorage.setItem(
-        storageKey,
-        JSON.stringify({ guesses, hiddenWord: currentHiddenWord, streak }),
-      );
-
       const solved = guesses[guesses.length - 1] === currentHiddenWord;
-      const gameOver = guesses.length === 6;
+      const gameOver = !solved && guesses.length === 6;
 
       if (solved) {
+        setStreak((prev) => {
+          const newStreak = prev + 1;
+          localStorage.setItem(
+            storageKey,
+            JSON.stringify({
+              guesses,
+              hiddenWord: currentHiddenWord,
+              streak: newStreak,
+            }),
+          );
+          return newStreak;
+        });
         setTimeout(() => {
-          setStreak((prev) => {
-            const newStreak = prev + 1;
-            localStorage.setItem(
-              storageKey,
-              JSON.stringify({
-                guesses,
-                hiddenWord: currentHiddenWord,
-                streak: newStreak,
-              }),
-            );
-            return newStreak;
-          });
           setEndlessSolved(true);
         }, 1000);
+      } else {
+        localStorage.setItem(
+          storageKey,
+          JSON.stringify({ guesses, hiddenWord: currentHiddenWord, streak }),
+        );
       }
 
       if (gameOver) {
         try {
-          // TODO: send stats to backend
+          const response = await fetch("http://localhost:3000/wordle/stats", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              mode: "endless",
+              difficulty: params.difficulty,
+              streak,
+            }),
+          });
+
+          if (!response.ok) {
+            console.error("Failed to save stats:", await response.json());
+          } else {
+            localStorage.removeItem(`wordle-endless-${params.difficulty}`);
+          }
         } catch (err) {
           console.error("Failed to save stats:", err);
         }
