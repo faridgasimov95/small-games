@@ -9,6 +9,7 @@ import {
 type WordleLoaderData = {
   hiddenWord: string;
   guesses: string[];
+  currentStreak?: number;
 };
 
 export async function wordleLoader({
@@ -22,6 +23,13 @@ export async function wordleLoader({
       const { guesses, hiddenWord } = JSON.parse(savedResult);
       return { hiddenWord, guesses: guesses };
     }
+  } else if (params.mode === "endless") {
+    const storageKey = `wordle-endless-${params.difficulty}`;
+    const savedResult = localStorage.getItem(storageKey);
+    if (savedResult) {
+      const { guesses, hiddenWord, streak } = JSON.parse(savedResult);
+      return { hiddenWord, guesses: guesses, currentStreak: streak };
+    }
   }
 
   const response = await fetch(
@@ -33,15 +41,18 @@ export async function wordleLoader({
 
 export default function WordlePage() {
   const params = useParams();
-  const { hiddenWord, guesses } = useLoaderData() as WordleLoaderData;
+  const { hiddenWord, guesses, currentStreak } =
+    useLoaderData() as WordleLoaderData;
   const [currentGuesses, setCurrentGuesses] = useState(guesses);
   const [boardKey, setBoardKey] = useState(0);
   const [currentHiddenWord, setCurrentHiddenWord] = useState(hiddenWord);
   const readOnly =
     currentGuesses.length === 6 ||
     currentGuesses[currentGuesses.length - 1] === currentHiddenWord;
-  const [streak, setStreak] = useState(0);
-  const [endlessSolved, setEndlessSolved] = useState(false);
+  const [streak, setStreak] = useState(currentStreak ?? 0);
+  const [endlessSolved, setEndlessSolved] = useState(
+    currentGuesses[currentGuesses.length - 1] === currentHiddenWord,
+  );
 
   async function handleGuessSubmit(guesses: string[]) {
     setCurrentGuesses(guesses);
@@ -80,12 +91,31 @@ export default function WordlePage() {
         }
       }
     } else if (params.mode === "endless") {
-      // TODO: save progress to local storage
+      const storageKey = `wordle-endless-${params.difficulty}`;
+      localStorage.setItem(
+        storageKey,
+        JSON.stringify({ guesses, hiddenWord: currentHiddenWord, streak }),
+      );
+
       const solved = guesses[guesses.length - 1] === currentHiddenWord;
       const gameOver = guesses.length === 6;
 
       if (solved) {
-        setTimeout(() => setEndlessSolved(true), 1000);
+        setTimeout(() => {
+          setStreak((prev) => {
+            const newStreak = prev + 1;
+            localStorage.setItem(
+              storageKey,
+              JSON.stringify({
+                guesses,
+                hiddenWord: currentHiddenWord,
+                streak: newStreak,
+              }),
+            );
+            return newStreak;
+          });
+          setEndlessSolved(true);
+        }, 1000);
       }
 
       if (gameOver) {
@@ -100,15 +130,16 @@ export default function WordlePage() {
 
   async function handleNext() {
     setEndlessSolved(false);
-    setStreak((prev) => prev + 1);
-    setBoardKey((prev) => prev + 1);
     const response = await fetch(
       `http://localhost:3000/wordle/word?difficulty=${params.difficulty?.toLowerCase()}`,
     );
     const newWord = await response.text();
     setCurrentHiddenWord(newWord);
     setCurrentGuesses([]);
+    setBoardKey((prev) => prev + 1);
   }
+
+  console.log(boardKey);
 
   return (
     <div className="flex flex-col gap-2 min-h-screen items-center pt-10">
@@ -117,7 +148,7 @@ export default function WordlePage() {
       </h1>
       <WordleBoard
         hiddenWord={currentHiddenWord}
-        initialGuesses={guesses}
+        initialGuesses={currentGuesses}
         readOnly={readOnly}
         onGuessSubmit={handleGuessSubmit}
         key={boardKey}
