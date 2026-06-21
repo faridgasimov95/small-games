@@ -159,9 +159,17 @@ export default function WordlePage() {
 
   return (
     <div className="flex flex-col gap-2 min-h-screen items-center pt-10">
-      <h1>
-        Wordle - {params.mode} - {params.difficulty}
-      </h1>
+      <div className="flex flex-col items-center">
+        <h2 className="font-mono text-text/50">
+          {params.mode?.toUpperCase()} MODE
+        </h2>
+        <h1 className="flex justify-center gap-2">
+          <span className="font-pixel text-accent text-xl">WORDLE</span>
+          <span className="bg-accent px-2 py-0.5 rounded-xl text-sm text-bg ">
+            {params.difficulty?.toUpperCase()}
+          </span>
+        </h1>
+      </div>
       <WordleBoard
         hiddenWord={currentHiddenWord}
         initialGuesses={currentGuesses}

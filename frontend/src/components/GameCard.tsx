@@ -37,7 +37,7 @@ export default function GameCard({ game }: { game: Game }) {
                   onClick={() =>
                     setSelectedDifficulty((prev) => (prev === d ? null : d))
                   }
-                  className={`cursor-pointer px-4 py-2 rounded-sm transition-colors font-pixelify ${
+                  className={`cursor-pointer px-4 py-2 rounded-sm transition-colors font-mono ${
                     selectedDifficulty === d
                       ? "bg-surface-card-selected text-bg"
                       : "bg-surface-card text-text hover:bg-accent hover:text-bg"
@@ -55,7 +55,7 @@ export default function GameCard({ game }: { game: Game }) {
                   onClick={() =>
                     setSelectedMode((prev) => (prev === m ? null : m))
                   }
-                  className={`cursor-pointer px-4 py-2 rounded-sm transition-colors font-pixelify ${
+                  className={`cursor-pointer px-4 py-2 rounded-sm transition-colors font-mono ${
                     selectedMode === m
                       ? "bg-surface-card-selected text-bg"
                       : "bg-surface-card text-text hover:bg-accent hover:text-bg"

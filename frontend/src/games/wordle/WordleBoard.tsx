@@ -53,7 +53,7 @@ export default function WordleBoard({
   }, [currentGuess, wordLength, readOnly]);
 
   return (
-    <div className="flex flex-col gap-2">
+    <div className="flex flex-col gap-2 bg-surface border-2 border-accent p-4">
       {Array.from({ length: 6 }, (_, i) => i).map((attempt) => (
         <WordleRow
           key={attempt}

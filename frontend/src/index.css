@@ -1,5 +1,6 @@
 @import url("https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap");
 @import url("https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Pixelify+Sans:wght@400;500;600&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&display=swap");
 @import "tailwindcss";
 
 @theme {
@@ -18,7 +19,7 @@
   --color-tile-empty: #1a0a2e;
   --color-tile-text-dark: #1a1a1a;
   --color-tile-text-light: #e9d5ff;
-  --font-pixelify: "Pixelify Sans", sans-serif;
+  --font-mono: "JetBrains Mono", monospace;
 }
 
 @keyframes shake {
