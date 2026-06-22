@@ -33,7 +33,7 @@ export async function wordleLoader({
   }
 
   const response = await fetch(
-    `http://localhost:3000/wordle/word?difficulty=${params.difficulty?.toLowerCase()}`,
+    `http://localhost:3000/wordle/word?difficulty=${params.difficulty?.toLowerCase()}&mode=${params.mode?.toLowerCase()}`,
   );
   const hiddenWord = await response.text();
   return { hiddenWord, guesses: [] };
@@ -147,15 +147,13 @@ export default function WordlePage() {
   async function handleNext() {
     setEndlessSolved(false);
     const response = await fetch(
-      `http://localhost:3000/wordle/word?difficulty=${params.difficulty?.toLowerCase()}`,
+      `http://localhost:3000/wordle/word?difficulty=${params.difficulty?.toLowerCase()}&mode=${params.mode?.toLowerCase()}`,
     );
     const newWord = await response.text();
     setCurrentHiddenWord(newWord);
     setCurrentGuesses([]);
     setBoardKey((prev) => prev + 1);
   }
-
-  console.log(boardKey);
 
   return (
     <div className="flex flex-col gap-2 min-h-screen items-center pt-10">

@@ -5,7 +5,7 @@ import {
   loadStats,
   loadJson as loadWords,
 } from "../utils/wordUtils";
-import { GlobalWordleStats } from "../types/wordle";
+import { Difficulty, GlobalWordleStats } from "../types/wordle";
 
 const wordsEasy = loadWords<string>("wordle", "easy.json");
 const wordsMedium = loadWords<string>("wordle", "medium.json");
@@ -17,13 +17,36 @@ const wordLists: Record<string, string[]> = {
   hard: wordsHard,
 };
 
+type DailyWordCache = {
+  date: string;
+  word: string;
+};
+
+const cachedWords: Record<Difficulty, DailyWordCache | null> = {
+  easy: null,
+  medium: null,
+  hard: null,
+};
+
 export const fetchWord = async (req: Request, res: Response): Promise<void> => {
   const difficulty = req.query.difficulty as string;
+  const words = wordLists[difficulty];
   try {
-    const words = wordLists[difficulty];
     if (!words) throw new Error(`Invalid difficulty: ${difficulty}`);
-    const word = getWord(words);
-    res.send(word);
+
+    if (req.query.mode === "daily") {
+      const todayDate = new Date().toISOString().split("T")[0];
+      const cached = cachedWords[difficulty as Difficulty];
+      if (!cached || cached.date !== todayDate) {
+        cachedWords[difficulty as Difficulty] = {
+          date: todayDate,
+          word: getWord(words),
+        };
+      }
+      res.send(cachedWords[difficulty as Difficulty]!.word);
+    } else {
+      res.send(getWord(words));
+    }
   } catch (e) {
     if (e instanceof Error && e.message.includes("Invalid difficulty")) {
       res.status(400).json({ error: e.message });
