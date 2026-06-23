@@ -1,3 +1,4 @@
+import Modal from "@/components/Modal";
 import WordleBoard from "@/games/wordle/WordleBoard";
 import { useState } from "react";
 import {
@@ -53,6 +54,7 @@ export default function WordlePage() {
   const [endlessSolved, setEndlessSolved] = useState(
     currentGuesses[currentGuesses.length - 1] === currentHiddenWord,
   );
+  const [showModal, setShowModal] = useState(false);
 
   async function handleGuessSubmit(guesses: string[]) {
     setCurrentGuesses(guesses);
@@ -68,6 +70,7 @@ export default function WordlePage() {
       const gameOver = solved || guesses.length === 6;
 
       if (gameOver) {
+        setTimeout(() => setShowModal(true), 1000);
         try {
           const response = await fetch("http://localhost:3000/wordle/stats", {
             method: "POST",
@@ -119,6 +122,7 @@ export default function WordlePage() {
       }
 
       if (gameOver) {
+        setTimeout(() => setShowModal(true), 1000);
         try {
           const response = await fetch("http://localhost:3000/wordle/stats", {
             method: "POST",
@@ -156,33 +160,40 @@ export default function WordlePage() {
   }
 
   return (
-    <div className="flex flex-col gap-2 min-h-screen items-center pt-10">
-      <div className="flex flex-col items-center">
-        <h2 className="font-mono text-text/50">
-          {params.mode?.toUpperCase()} MODE
-        </h2>
-        <h1 className="flex justify-center gap-2">
-          <span className="font-pixel text-accent text-xl">WORDLE</span>
-          <span className="bg-accent px-2 py-0.5 rounded-xl text-sm text-bg ">
-            {params.difficulty?.toUpperCase()}
-          </span>
-        </h1>
+    <>
+      <div className="flex flex-col gap-2 min-h-screen items-center pt-10">
+        <div className="flex flex-col items-center">
+          <h2 className="font-mono text-text/50">
+            {params.mode?.toUpperCase()} MODE
+          </h2>
+          <h1 className="flex justify-center gap-2">
+            <span className="font-pixel text-accent text-xl">WORDLE</span>
+            <span className="bg-accent px-2 py-0.5 rounded-xl text-sm text-bg ">
+              {params.difficulty?.toUpperCase()}
+            </span>
+          </h1>
+        </div>
+        <WordleBoard
+          hiddenWord={currentHiddenWord}
+          initialGuesses={currentGuesses}
+          readOnly={readOnly}
+          onGuessSubmit={handleGuessSubmit}
+          key={boardKey}
+        />
+        {endlessSolved && (
+          <button
+            className="px-4 py-2 bg-accent text-bg font-pixel transition-opacity"
+            onClick={handleNext}
+          >
+            Next
+          </button>
+        )}
       </div>
-      <WordleBoard
-        hiddenWord={currentHiddenWord}
-        initialGuesses={currentGuesses}
-        readOnly={readOnly}
-        onGuessSubmit={handleGuessSubmit}
-        key={boardKey}
-      />
-      {endlessSolved && (
-        <button
-          className="px-4 py-2 bg-accent text-bg font-pixel transition-opacity"
-          onClick={handleNext}
-        >
-          Next
-        </button>
+      {showModal && (
+        <Modal onClose={() => setShowModal(false)}>
+          <p>Game over!</p>
+        </Modal>
       )}
-    </div>
+    </>
   );
 }
