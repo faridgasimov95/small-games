@@ -1,5 +1,5 @@
-import Modal from "@/components/Modal";
 import WordleBoard from "@/games/wordle/WordleBoard";
+import WordleResultModal from "@/games/wordle/WordleResultModal";
 import { useState } from "react";
 import {
   useLoaderData,
@@ -190,9 +190,16 @@ export default function WordlePage() {
         )}
       </div>
       {showModal && (
-        <Modal onClose={() => setShowModal(false)}>
-          <p>Game over!</p>
-        </Modal>
+        <WordleResultModal
+          mode={params.mode!}
+          solved={
+            currentGuesses[currentGuesses.length - 1] === currentHiddenWord
+          }
+          hiddenWord={currentHiddenWord}
+          attempts={currentGuesses.length}
+          streak={streak}
+          onClose={() => setShowModal(false)}
+        />
       )}
     </>
   );
