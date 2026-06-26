@@ -40,3 +40,10 @@ export type GlobalWordleStats = {
     hard: EndlessStats;
   };
 };
+
+export type DailyWords = {
+  date: string;
+  easy: string | null;
+  medium: string | null;
+  hard: string | null;
+};

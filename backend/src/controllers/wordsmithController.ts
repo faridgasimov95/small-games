@@ -2,7 +2,7 @@ import { Request, Response } from "express";
 import { saveGlobalWordsmithStats as saveStats } from "../services/wordsmithService";
 import {
   getRandom as getPuzzle,
-  loadStats,
+  loadData as loadStats,
   loadJson as loadPuzzles,
 } from "../utils/wordUtils";
 import { GlobalWordsmithStats, Puzzle } from "../types/wordsmith";

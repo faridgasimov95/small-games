@@ -20,16 +20,24 @@ export const getRandom = <T>(items: T[]): T => {
   return items[Math.floor(Math.random() * items.length)];
 };
 
-export function loadStats<T>(filePath: string): T {
+export function loadData<T>(filePath: string): T {
   try {
-    const stats = JSON.parse(
+    const data = JSON.parse(
       fs.readFileSync(path.join(__dirname, filePath), "utf-8"),
     );
-    if (!Object.keys(stats).length) throw new Error(`${filePath} is empty`);
-    return stats;
+    if (!Object.keys(data).length) throw new Error(`${filePath} is empty`);
+    return data;
   } catch (e) {
     throw new Error(`Failed to load stats: ${e}`);
   }
+}
+
+export function writeData<T>(filePath: string, data: T): void {
+  fs.writeFileSync(
+    path.join(__dirname, filePath),
+    JSON.stringify(data, null, 2),
+    "utf-8",
+  );
 }
 
 export const updateTopTen = (top: number[], newValue: number) => {

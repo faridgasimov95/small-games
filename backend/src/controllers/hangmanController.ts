@@ -2,7 +2,7 @@ import { Request, Response } from "express";
 import { saveGlobalHangmanStats as saveStats } from "../services/hangmanService";
 import {
   getRandom as getWord,
-  loadStats,
+  loadData as loadStats,
   loadJson as loadWords,
 } from "../utils/wordUtils";
 import { GlobalHangmanStats } from "../types/hangman";

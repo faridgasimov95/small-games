@@ -2,10 +2,11 @@ import { Request, Response } from "express";
 import { saveGlobalWordleStats as saveStats } from "../services/wordleService";
 import {
   getRandom as getWord,
-  loadStats,
+  loadData,
+  writeData,
   loadJson as loadWords,
 } from "../utils/wordUtils";
-import { Difficulty, GlobalWordleStats } from "../types/wordle";
+import { Difficulty, GlobalWordleStats, DailyWords } from "../types/wordle";
 
 const wordsEasy = loadWords<string>("wordle", "easy.json");
 const wordsMedium = loadWords<string>("wordle", "medium.json");
@@ -17,17 +18,6 @@ const wordLists: Record<string, string[]> = {
   hard: wordsHard,
 };
 
-type DailyWordCache = {
-  date: string;
-  word: string;
-};
-
-const cachedWords: Record<Difficulty, DailyWordCache | null> = {
-  easy: null,
-  medium: null,
-  hard: null,
-};
-
 export const fetchWord = async (req: Request, res: Response): Promise<void> => {
   const difficulty = req.query.difficulty as string;
   const words = wordLists[difficulty];
@@ -36,14 +26,25 @@ export const fetchWord = async (req: Request, res: Response): Promise<void> => {
 
     if (req.query.mode === "daily") {
       const todayDate = new Date().toISOString().split("T")[0];
-      const cached = cachedWords[difficulty as Difficulty];
-      if (!cached || cached.date !== todayDate) {
-        cachedWords[difficulty as Difficulty] = {
+      const dailyWords = loadData<DailyWords>("../data/wordle/dailyWords.json");
+      let word = dailyWords[difficulty as Difficulty];
+      if (dailyWords.date !== todayDate) {
+        word = getWord(words);
+        writeData("../data/wordle/dailyWords.json", {
           date: todayDate,
-          word: getWord(words),
-        };
+          easy: null,
+          medium: null,
+          hard: null,
+          [difficulty]: word,
+        });
+      } else if (dailyWords[difficulty as Difficulty] === null) {
+        word = getWord(words);
+        writeData("../data/wordle/dailyWords.json", {
+          ...dailyWords,
+          [difficulty]: word,
+        });
       }
-      res.send(cachedWords[difficulty as Difficulty]!.word);
+      res.send(word);
     } else {
       res.send(getWord(words));
     }
@@ -62,7 +63,7 @@ export const updateStats = async (
 ): Promise<void> => {
   try {
     const singleStats = req.body;
-    const globalStats = loadStats<GlobalWordleStats>(
+    const globalStats = loadData<GlobalWordleStats>(
       "../data/wordle/wordleStats.json",
     );
     saveStats(globalStats, singleStats);
