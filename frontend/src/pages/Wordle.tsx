@@ -1,3 +1,4 @@
+const API_URL = import.meta.env.VITE_API_URL;
 import WordleBoard from "@/games/wordle/WordleBoard";
 import WordleResultModal from "@/games/wordle/WordleResultModal";
 import { useState } from "react";
@@ -34,7 +35,7 @@ export async function wordleLoader({
   }
 
   const response = await fetch(
-    `http://localhost:3000/wordle/word?difficulty=${params.difficulty?.toLowerCase()}&mode=${params.mode?.toLowerCase()}`,
+    `${API_URL}/wordle/word?difficulty=${params.difficulty?.toLowerCase()}&mode=${params.mode?.toLowerCase()}`,
   );
   const hiddenWord = await response.text();
   return { hiddenWord, guesses: [] };
@@ -72,7 +73,7 @@ export default function WordlePage() {
       if (gameOver) {
         setTimeout(() => setShowModal(true), 1000);
         try {
-          const response = await fetch("http://localhost:3000/wordle/stats", {
+          const response = await fetch(`${API_URL}/wordle/stats`, {
             method: "POST",
             headers: {
               "Content-Type": "application/json",
@@ -124,7 +125,7 @@ export default function WordlePage() {
       if (gameOver) {
         setTimeout(() => setShowModal(true), 1000);
         try {
-          const response = await fetch("http://localhost:3000/wordle/stats", {
+          const response = await fetch(`${API_URL}/wordle/stats`, {
             method: "POST",
             headers: {
               "Content-Type": "application/json",
@@ -151,7 +152,7 @@ export default function WordlePage() {
   async function handleNext() {
     setEndlessSolved(false);
     const response = await fetch(
-      `http://localhost:3000/wordle/word?difficulty=${params.difficulty?.toLowerCase()}&mode=${params.mode?.toLowerCase()}`,
+      `${API_URL}/wordle/word?difficulty=${params.difficulty?.toLowerCase()}&mode=${params.mode?.toLowerCase()}`,
     );
     const newWord = await response.text();
     setCurrentHiddenWord(newWord);
