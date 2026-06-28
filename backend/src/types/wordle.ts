@@ -1,5 +1,7 @@
 export type Difficulty = "easy" | "medium" | "hard";
 
+export type Mode = "daily" | "endless";
+
 export type DailyGameResult = {
   mode: "daily";
   difficulty: Difficulty;

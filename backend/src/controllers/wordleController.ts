@@ -6,7 +6,12 @@ import {
   writeData,
   loadJson as loadWords,
 } from "../utils/wordUtils";
-import { Difficulty, GlobalWordleStats, DailyWords } from "../types/wordle";
+import {
+  Difficulty,
+  GlobalWordleStats,
+  DailyWords,
+  Mode,
+} from "../types/wordle";
 
 const wordsEasy = loadWords<string>("wordle", "easy.json");
 const wordsMedium = loadWords<string>("wordle", "medium.json");
@@ -19,12 +24,13 @@ const wordLists: Record<string, string[]> = {
 };
 
 export const fetchWord = async (req: Request, res: Response): Promise<void> => {
-  const difficulty = req.query.difficulty as string;
+  const difficulty = req.query.difficulty as Difficulty;
+  const mode = req.query.mode as Mode;
   const words = wordLists[difficulty];
   try {
     if (!words) throw new Error(`Invalid difficulty: ${difficulty}`);
 
-    if (req.query.mode === "daily") {
+    if (mode === "daily") {
       const todayDate = new Date().toISOString().split("T")[0];
       const dailyWords = loadData<DailyWords>("../data/wordle/dailyWords.json");
       let word = dailyWords[difficulty as Difficulty];
@@ -45,7 +51,7 @@ export const fetchWord = async (req: Request, res: Response): Promise<void> => {
         });
       }
       res.send(word);
-    } else {
+    } else if (mode === "endless") {
       res.send(getWord(words));
     }
   } catch (e) {
@@ -68,11 +74,52 @@ export const updateStats = async (
     );
     saveStats(globalStats, singleStats);
     res.send({ message: "Stats were saved successfully" });
-  } catch (e) {
-    if (e instanceof Error && e.message.includes("game-mode doesn't exist")) {
-      res.status(400).json({ error: e.message });
+  } catch (err) {
+    if (
+      err instanceof Error &&
+      err.message.includes("game-mode doesn't exist")
+    ) {
+      res.status(400).json({ error: err.message });
     } else {
-      console.log(e);
+      console.log(err);
+      res.status(500).json({ error: "Internal server error" });
+    }
+  }
+};
+
+export const fetchStats = async (
+  req: Request,
+  res: Response,
+): Promise<void> => {
+  try {
+    const difficulty = req.query.difficulty as Difficulty;
+    const mode = req.query.mode as Mode;
+    const todayDate = new Date().toISOString().split("T")[0];
+
+    const globalStats = loadData<GlobalWordleStats>(
+      "../data/wordle/wordleStats.json",
+    );
+
+    if (mode === "daily") {
+      const todayStats = globalStats.daily[todayDate];
+      if (!todayStats) {
+        res.send({ attempts: [0, 0, 0, 0, 0, 0], solved: 0, total: 0 });
+        return;
+      }
+      const stats = todayStats[difficulty];
+      res.send(stats);
+    } else if (mode === "endless") {
+      const stats = globalStats.endless[difficulty];
+      res.send(stats);
+    }
+  } catch (err) {
+    if (
+      err instanceof Error &&
+      err.message.includes("game-mode doesn't exist")
+    ) {
+      res.status(400).json({ error: err.message });
+    } else {
+      console.log(err);
       res.status(500).json({ error: "Internal server error" });
     }
   }
