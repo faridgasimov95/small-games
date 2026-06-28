@@ -23,6 +23,7 @@
 
 import fs from "fs";
 import path from "path";
+import nlp from "compromise";
 
 async function fetchWords(pattern: string, minFreq: number): Promise<string[]> {
   const letters = "abcdefghijklmnopqrstuvwxyz".split("");
@@ -39,17 +40,20 @@ async function fetchWords(pattern: string, minFreq: number): Promise<string[]> {
         word: obj.word,
         freq: parseFloat(obj.tags?.[0]?.replace("f:", "") ?? "0"),
         isProper: obj.tags?.includes("prop"),
-        isPlural: obj.tags?.includes("pl"),
+        isProper2: nlp(obj.word).has("#ProperNoun"),
+        isPlural: nlp(obj.word).nouns().isPlural().found,
       }))
       .filter(
         (obj: {
           word: string;
           freq: number;
           isProper: boolean;
+          isProper2: boolean;
           isPlural: boolean;
         }) =>
           obj.freq >= minFreq &&
           !obj.isProper &&
+          !obj.isProper2 &&
           !obj.isPlural &&
           !obj.word.includes(" "),
       )
@@ -62,6 +66,9 @@ async function fetchWords(pattern: string, minFreq: number): Promise<string[]> {
 }
 
 async function generateWordLists() {
+  console.log("Fetching easy words (4 letters)...");
+  const superEasy = await fetchWords("???", 1.5);
+
   console.log("Fetching easy words (5 letters)...");
   const easy = await fetchWords("????", 1.5);
 
@@ -71,21 +78,41 @@ async function generateWordLists() {
   console.log("Fetching hard words (5 letters)...");
   const hard = await fetchWords("??????", 1.5);
 
-  console.log(`Easy: ${easy.length} words`);
-  console.log(`Medium: ${medium.length} words`);
-  console.log(`Hard: ${hard.length} words`);
+  const easyFiltered = easy.filter(
+    (word: string) =>
+      !(word[word.length - 1] === "s" && superEasy.includes(word.slice(0, -1))),
+  );
+  const mediumFiltered = medium.filter(
+    (word: string) =>
+      !(
+        word[word.length - 1] === "s" &&
+        (easy.includes(word.slice(0, -1)) ||
+          superEasy.includes(word.slice(0, -2)))
+      ),
+  );
+  const hardFiltered = hard.filter(
+    (word: string) =>
+      !(
+        word[word.length - 1] === "s" &&
+        (medium.includes(word.slice(0, -1)) || easy.includes(word.slice(0, -2)))
+      ),
+  );
+
+  console.log(`Easy: ${easyFiltered.length} words`);
+  console.log(`Medium: ${mediumFiltered.length} words`);
+  console.log(`Hard: ${hardFiltered.length} words`);
 
   fs.writeFileSync(
     path.join(__dirname, "../data/wordle/easy.json"),
-    JSON.stringify(easy, null, 2),
+    JSON.stringify(easyFiltered, null, 2),
   );
   fs.writeFileSync(
     path.join(__dirname, "../data/wordle/medium.json"),
-    JSON.stringify(medium, null, 2),
+    JSON.stringify(mediumFiltered, null, 2),
   );
   fs.writeFileSync(
     path.join(__dirname, "../data/wordle/hard.json"),
-    JSON.stringify(hard, null, 2),
+    JSON.stringify(hardFiltered, null, 2),
   );
 
   console.log("Done!");
