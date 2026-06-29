@@ -1,7 +1,11 @@
 import Modal from "@/components/Modal";
+import type { DailyStats, EndlessStats } from "@/types/wordle";
+import { useEffect, useState } from "react";
+const API_URL = import.meta.env.VITE_API_URL;
 
 type WordleResultModalProps = {
   mode: string;
+  difficulty: string;
   solved: boolean;
   hiddenWord: string;
   attempts?: number;
@@ -11,12 +15,28 @@ type WordleResultModalProps = {
 
 export default function WordleResultModal({
   mode,
+  difficulty,
   solved,
   hiddenWord,
   attempts,
   streak,
   onClose,
 }: WordleResultModalProps) {
+  const [stats, setStats] = useState<DailyStats | EndlessStats | null>(null);
+
+  useEffect(() => {
+    const fetchStats = async () => {
+      const response = await fetch(
+        `${API_URL}/wordle/stats?difficulty=${difficulty}&mode=${mode}`,
+      );
+      const data = await response.json();
+
+      setStats(data);
+    };
+
+    fetchStats();
+  }, [mode, difficulty]);
+
   return (
     <Modal onClose={onClose}>
       <div className="flex flex-col gap-4 items-center text-center">

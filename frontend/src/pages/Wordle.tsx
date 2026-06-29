@@ -1,4 +1,3 @@
-const API_URL = import.meta.env.VITE_API_URL;
 import WordleBoard from "@/games/wordle/WordleBoard";
 import WordleResultModal from "@/games/wordle/WordleResultModal";
 import { useState } from "react";
@@ -7,6 +6,7 @@ import {
   useParams,
   type LoaderFunctionArgs,
 } from "react-router-dom";
+const API_URL = import.meta.env.VITE_API_URL;
 
 type WordleLoaderData = {
   hiddenWord: string;
@@ -193,6 +193,7 @@ export default function WordlePage() {
       {showModal && (
         <WordleResultModal
           mode={params.mode!}
+          difficulty={params.difficulty!}
           solved={
             currentGuesses[currentGuesses.length - 1] === currentHiddenWord
           }
