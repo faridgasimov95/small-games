@@ -1,5 +1,9 @@
 import { Router } from "express";
-import { fetchWord, updateStats } from "../controllers/wordleController";
+import {
+  fetchWord,
+  updateStats,
+  fetchStats,
+} from "../controllers/wordleController";
 
 /**
  * Route for Wordle
@@ -10,5 +14,6 @@ const router = Router();
 
 router.get("/word", fetchWord);
 router.post("/stats", updateStats);
+router.get("/stats", fetchStats);
 
 export default router;
