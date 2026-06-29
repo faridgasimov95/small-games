@@ -55,6 +55,17 @@ export default function WordleResultModal({
         {mode === "endless" && solved && attempts && (
           <p className="text-text/70">Streak: {streak}</p>
         )}
+        {stats &&
+          mode === "daily" &&
+          "attempts" in stats &&
+          // render daily stats
+          null}
+
+        {stats &&
+          mode === "endless" &&
+          "totalStreak" in stats &&
+          // render endless stats
+          null}
         <button
           onClick={onClose}
           className="px-4 py-2 bg-accent text-bg font-pixel text-sm"
