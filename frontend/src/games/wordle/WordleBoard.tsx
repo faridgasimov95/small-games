@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import WordleRow from "./WordleRow";
+import { WORDLE_MAX_ATTEMPTS } from "./constants";
 
 type WordleBoardProps = {
   hiddenWord: string;
@@ -54,19 +55,22 @@ export default function WordleBoard({
 
   return (
     <div className="flex flex-col gap-2 bg-surface border-2 border-accent p-4">
-      {Array.from({ length: 6 }, (_, i) => i).map((attempt) => (
-        <WordleRow
-          key={attempt}
-          guessedWord={
-            guesses[attempt] ?? (attempt === guesses.length ? currentGuess : "")
-          }
-          {...(guesses[attempt]
-            ? { isSubmitted: true, hiddenWord }
-            : { isSubmitted: false })}
-          isShaking={attempt === shakingRow}
-          wordLength={wordLength}
-        />
-      ))}
+      {Array.from({ length: WORDLE_MAX_ATTEMPTS }, (_, i) => i).map(
+        (attempt) => (
+          <WordleRow
+            key={attempt}
+            guessedWord={
+              guesses[attempt] ??
+              (attempt === guesses.length ? currentGuess : "")
+            }
+            {...(guesses[attempt]
+              ? { isSubmitted: true, hiddenWord }
+              : { isSubmitted: false })}
+            isShaking={attempt === shakingRow}
+            wordLength={wordLength}
+          />
+        ),
+      )}
     </div>
   );
 }

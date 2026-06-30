@@ -1,3 +1,4 @@
+import { WORDLE_MAX_ATTEMPTS } from "@/games/wordle/constants";
 import WordleBoard from "@/games/wordle/WordleBoard";
 import WordleResultModal from "@/games/wordle/WordleResultModal";
 import { useState } from "react";
@@ -49,7 +50,7 @@ export default function WordlePage() {
   const [boardKey, setBoardKey] = useState(0);
   const [currentHiddenWord, setCurrentHiddenWord] = useState(hiddenWord);
   const readOnly =
-    currentGuesses.length === 6 ||
+    currentGuesses.length === WORDLE_MAX_ATTEMPTS ||
     currentGuesses[currentGuesses.length - 1] === currentHiddenWord;
   const [streak, setStreak] = useState(currentStreak ?? 0);
   const [endlessSolved, setEndlessSolved] = useState(
@@ -68,7 +69,7 @@ export default function WordlePage() {
       );
 
       const solved = guesses[guesses.length - 1] === currentHiddenWord;
-      const gameOver = solved || guesses.length === 6;
+      const gameOver = solved || guesses.length === WORDLE_MAX_ATTEMPTS;
 
       if (gameOver) {
         setTimeout(() => setShowModal(true), 1000);
@@ -97,7 +98,7 @@ export default function WordlePage() {
     } else if (params.mode === "endless") {
       const storageKey = `wordle-endless-${params.difficulty}`;
       const solved = guesses[guesses.length - 1] === currentHiddenWord;
-      const gameOver = !solved && guesses.length === 6;
+      const gameOver = !solved && guesses.length === WORDLE_MAX_ATTEMPTS;
 
       if (solved) {
         setStreak((prev) => {
