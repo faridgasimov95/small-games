@@ -5,6 +5,7 @@ import {
   loadData,
   writeData,
   loadJson as loadWords,
+  getHistory,
 } from "../utils/wordUtils";
 import {
   Difficulty,
@@ -12,6 +13,7 @@ import {
   DailyWords,
   Mode,
 } from "../types/wordle";
+import { MAX_WORDS_HISTORY } from "../data/wordle/constants";
 
 const wordsEasy = loadWords<string>("wordle", "easy.json");
 const wordsMedium = loadWords<string>("wordle", "medium.json");
@@ -32,22 +34,32 @@ export const fetchWord = async (req: Request, res: Response): Promise<void> => {
 
     if (mode === "daily") {
       const todayDate = new Date().toISOString().split("T")[0];
-      const dailyWords = loadData<DailyWords>("../data/wordle/dailyWords.json");
-      let word = dailyWords[difficulty as Difficulty];
-      if (dailyWords.date !== todayDate) {
-        word = getWord(words);
+      const stored = loadData<DailyWords>("../data/wordle/dailyWords.json");
+      const base: DailyWords =
+        stored.date === todayDate
+          ? stored
+          : {
+              ...stored,
+              date: todayDate,
+              easy: null,
+              medium: null,
+              hard: null,
+            };
+
+      let word = base[difficulty];
+
+      if (word === null) {
+        do {
+          word = getWord(words);
+        } while (getHistory(base, difficulty).includes(word));
+
         writeData("../data/wordle/dailyWords.json", {
-          date: todayDate,
-          easy: null,
-          medium: null,
-          hard: null,
+          ...base,
           [difficulty]: word,
-        });
-      } else if (dailyWords[difficulty as Difficulty] === null) {
-        word = getWord(words);
-        writeData("../data/wordle/dailyWords.json", {
-          ...dailyWords,
-          [difficulty]: word,
+          [difficulty + "History"]: [
+            ...getHistory(base, difficulty),
+            word,
+          ].slice(-MAX_WORDS_HISTORY),
         });
       }
       res.send(word);

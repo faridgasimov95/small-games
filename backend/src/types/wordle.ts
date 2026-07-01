@@ -48,4 +48,7 @@ export type DailyWords = {
   easy: string | null;
   medium: string | null;
   hard: string | null;
+  easyHistory: string[];
+  mediumHistory: string[];
+  hardHistory: string[];
 };
