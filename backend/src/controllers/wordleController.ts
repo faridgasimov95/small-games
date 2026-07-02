@@ -28,6 +28,7 @@ const wordLists: Record<string, string[]> = {
 export const fetchWord = async (req: Request, res: Response): Promise<void> => {
   const difficulty = req.query.difficulty as Difficulty;
   const mode = req.query.mode as Mode;
+  const data = req.body;
   const words = wordLists[difficulty];
   try {
     if (!words) throw new Error(`Invalid difficulty: ${difficulty}`);
@@ -64,7 +65,11 @@ export const fetchWord = async (req: Request, res: Response): Promise<void> => {
       }
       res.send(word);
     } else if (mode === "endless") {
-      res.send(getWord(words));
+      let word = getWord(words);
+      while (data.words.includes(word)) {
+        word = getWord(words);
+      }
+      res.send(word);
     }
   } catch (e) {
     if (e instanceof Error && e.message.includes("Invalid difficulty")) {
