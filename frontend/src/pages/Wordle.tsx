@@ -1,4 +1,7 @@
-import { WORDLE_MAX_ATTEMPTS } from "@/games/wordle/constants";
+import {
+  ENDLESS_HISTORY_LIMIT,
+  WORDLE_MAX_ATTEMPTS,
+} from "@/games/wordle/constants";
 import WordleBoard from "@/games/wordle/WordleBoard";
 import WordleResultModal from "@/games/wordle/WordleResultModal";
 import { useState } from "react";
@@ -41,6 +44,7 @@ export async function wordleLoader({
     `${API_URL}/wordle/word?difficulty=${params.difficulty?.toLowerCase()}&mode=${params.mode?.toLowerCase()}`,
     {
       method: "POST",
+      headers: { "Content-Type": "application/json" },
       ...(params.mode === "endless"
         ? { body: JSON.stringify({ words: [] }) }
         : {}),
@@ -110,7 +114,9 @@ export default function WordlePage() {
       const gameOver = !solved && guesses.length === WORDLE_MAX_ATTEMPTS;
 
       if (solved) {
-        const newUsedWords = [...currentUsedWords, currentHiddenWord];
+        const newUsedWords = [...currentUsedWords, currentHiddenWord].slice(
+          -ENDLESS_HISTORY_LIMIT,
+        );
         setCurrentUsedWords(newUsedWords);
 
         setStreak((prev) => {

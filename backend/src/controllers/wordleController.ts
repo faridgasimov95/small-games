@@ -13,7 +13,10 @@ import {
   DailyWords,
   Mode,
 } from "../types/wordle";
-import { MAX_WORDS_HISTORY } from "../data/wordle/constants";
+import {
+  DAILY_HISTORY_LIMIT,
+  ENDLESS_HISTORY_LIMIT,
+} from "../data/wordle/constants";
 
 const wordsEasy = loadWords<string>("wordle", "easy.json");
 const wordsMedium = loadWords<string>("wordle", "medium.json");
@@ -60,13 +63,16 @@ export const fetchWord = async (req: Request, res: Response): Promise<void> => {
           [difficulty + "History"]: [
             ...getHistory(base, difficulty),
             word,
-          ].slice(-MAX_WORDS_HISTORY),
+          ].slice(-DAILY_HISTORY_LIMIT),
         });
       }
       res.send(word);
     } else if (mode === "endless") {
+      const recentWords = data.words.slice(-ENDLESS_HISTORY_LIMIT);
+      const recentSet = new Set(recentWords);
+
       let word = getWord(words);
-      while (data.words.includes(word)) {
+      while (recentSet.has(word)) {
         word = getWord(words);
       }
       res.send(word);

@@ -1,1 +1,2 @@
-export const MAX_WORDS_HISTORY = 90;
+export const DAILY_HISTORY_LIMIT = 365;
+export const ENDLESS_HISTORY_LIMIT = 200;
