@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import WordleRow from "./WordleRow";
 import { WORDLE_MAX_ATTEMPTS } from "./constants";
 
@@ -19,6 +19,7 @@ export default function WordleBoard({
   const [guesses, setGuesses] = useState<string[]>(initialGuesses);
   const [currentGuess, setCurrentGuess] = useState("");
   const [shakingRow, setShakingRow] = useState<number | null>(null);
+  const isSubmittingRef = useRef(false);
 
   useEffect(() => {
     if (readOnly) return;
@@ -28,7 +29,12 @@ export default function WordleBoard({
         setCurrentGuess((prev) => prev + e.key.toLowerCase());
       } else if (e.key === "Backspace" && currentGuess.length > 0) {
         setCurrentGuess((prev) => prev.slice(0, -1));
-      } else if (e.key === "Enter" && currentGuess.length === wordLength) {
+      } else if (
+        e.key === "Enter" &&
+        currentGuess.length === wordLength &&
+        !isSubmittingRef.current
+      ) {
+        isSubmittingRef.current = true;
         try {
           const response = await fetch(
             `https://api.dictionaryapi.dev/api/v2/entries/en/${currentGuess}`,
@@ -41,6 +47,8 @@ export default function WordleBoard({
         } catch (err) {
           console.error(err);
           return;
+        } finally {
+          isSubmittingRef.current = false;
         }
 
         setGuesses((prev) => [...prev, currentGuess]);
