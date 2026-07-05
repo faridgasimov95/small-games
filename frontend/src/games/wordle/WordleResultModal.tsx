@@ -2,6 +2,7 @@ import Modal from "@/components/Modal";
 import type { DailyStats, EndlessStats } from "@/types/wordle";
 import { useEffect, useState } from "react";
 import { WORDLE_MAX_ATTEMPTS } from "./constants";
+import DefinitionButton from "./DefinitionButton";
 const API_URL = import.meta.env.VITE_API_URL;
 
 type WordleResultModalProps = {
@@ -46,12 +47,15 @@ export default function WordleResultModal({
         <h2 className="font-pixel text-accent text-lg">
           {solved ? "You won!" : "You lost"}
         </h2>
-        <p className="font-mono text-text/70">
-          The word was{" "}
-          <span className="text-accent font-bold">
-            {hiddenWord.toUpperCase()}
-          </span>
-        </p>
+        <div className="flex gap-2 items-center">
+          <p className="font-mono text-text/70">
+            The word was{" "}
+            <span className="text-accent font-bold">
+              {hiddenWord.toUpperCase()}
+            </span>
+          </p>
+          <DefinitionButton word={hiddenWord} font="font-mono" />
+        </div>
         {mode === "daily" && solved && attempts && (
           <p className="text-text/70">Solved in {attempts}</p>
         )}
@@ -90,14 +94,14 @@ export default function WordleResultModal({
         <div className="flex gap-2">
           <button
             onClick={onClose}
-            className="px-4 py-2 bg-accent text-bg font-pixel text-sm"
+            className="px-4 py-2 bg-accent text-bg font-pixel text-sm cursor-pointer"
           >
             Close
           </button>
           {mode === "endless" && !solved && (
             <button
               onClick={onPlayAgain}
-              className="px-4 py-2 bg-accent text-bg font-pixel text-sm"
+              className="px-4 py-2 bg-accent text-bg font-pixel text-sm cursor-pointer"
             >
               Play Again
             </button>

@@ -2,6 +2,7 @@ import {
   ENDLESS_HISTORY_LIMIT,
   WORDLE_MAX_ATTEMPTS,
 } from "@/games/wordle/constants";
+import DefinitionButton from "@/games/wordle/DefinitionButton";
 import WordleBoard from "@/games/wordle/WordleBoard";
 import WordleResultModal from "@/games/wordle/WordleResultModal";
 import { useState } from "react";
@@ -222,13 +223,16 @@ export default function WordlePage() {
           onGuessSubmit={handleGuessSubmit}
           key={boardKey}
         />
-        {endlessSolved && (
-          <button
-            className="px-4 py-2 bg-accent text-bg font-pixel transition-opacity"
-            onClick={() => handleNext()}
-          >
-            Next
-          </button>
+        {params.mode === "endless" && endlessSolved && (
+          <div className="flex gap-2">
+            <button
+              className="px-4 py-2 bg-accent text-bg font-pixel transition-opacity cursor-pointer"
+              onClick={() => handleNext()}
+            >
+              Next
+            </button>
+            <DefinitionButton word={currentHiddenWord} font="font-pixel" />
+          </div>
         )}
       </div>
       {showModal && (

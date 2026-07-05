@@ -9,3 +9,8 @@ export type EndlessStats = {
   gamesPlayed: number;
   maxStreak: number;
 };
+
+export type WordDefinition = {
+  partOfSpeech: string;
+  definition: string;
+};
