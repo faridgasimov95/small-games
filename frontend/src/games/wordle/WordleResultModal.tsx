@@ -12,6 +12,7 @@ type WordleResultModalProps = {
   attempts?: number;
   streak?: number;
   onClose: () => void;
+  onPlayAgain?: () => void;
 };
 
 export default function WordleResultModal({
@@ -22,6 +23,7 @@ export default function WordleResultModal({
   attempts,
   streak,
   onClose,
+  onPlayAgain,
 }: WordleResultModalProps) {
   const [stats, setStats] = useState<DailyStats | EndlessStats | null>(null);
 
@@ -85,12 +87,22 @@ export default function WordleResultModal({
           "totalStreak" in stats &&
           // render endless stats
           null}
-        <button
-          onClick={onClose}
-          className="px-4 py-2 bg-accent text-bg font-pixel text-sm"
-        >
-          Close
-        </button>
+        <div className="flex gap-2">
+          <button
+            onClick={onClose}
+            className="px-4 py-2 bg-accent text-bg font-pixel text-sm"
+          >
+            Close
+          </button>
+          {mode === "endless" && !solved && (
+            <button
+              onClick={onPlayAgain}
+              className="px-4 py-2 bg-accent text-bg font-pixel text-sm"
+            >
+              Play Again
+            </button>
+          )}
+        </div>
       </div>
     </Modal>
   );

@@ -175,7 +175,8 @@ export default function WordlePage() {
     }
   }
 
-  async function handleNext() {
+  async function handleNext(usedWordsOverride?: string[]) {
+    const wordsToExclude = usedWordsOverride ?? currentUsedWords;
     setEndlessSolved(false);
     const response = await fetch(
       `${API_URL}/wordle/word?difficulty=${params.difficulty?.toLowerCase()}&mode=${params.mode?.toLowerCase()}`,
@@ -183,7 +184,7 @@ export default function WordlePage() {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         ...(params.mode === "endless"
-          ? { body: JSON.stringify({ words: currentUsedWords }) }
+          ? { body: JSON.stringify({ words: wordsToExclude }) }
           : {}),
       },
     );
@@ -191,6 +192,13 @@ export default function WordlePage() {
     setCurrentHiddenWord(newWord);
     setCurrentGuesses([]);
     setBoardKey((prev) => prev + 1);
+  }
+
+  function handlePlayAgain() {
+    setStreak(0);
+    setCurrentUsedWords([]);
+    setShowModal(false);
+    handleNext([]);
   }
 
   return (
@@ -217,7 +225,7 @@ export default function WordlePage() {
         {endlessSolved && (
           <button
             className="px-4 py-2 bg-accent text-bg font-pixel transition-opacity"
-            onClick={handleNext}
+            onClick={() => handleNext()}
           >
             Next
           </button>
@@ -234,6 +242,7 @@ export default function WordlePage() {
           attempts={currentGuesses.length}
           streak={streak}
           onClose={() => setShowModal(false)}
+          onPlayAgain={handlePlayAgain}
         />
       )}
     </>
