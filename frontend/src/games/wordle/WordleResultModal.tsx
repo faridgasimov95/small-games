@@ -1,8 +1,9 @@
 import Modal from "@/components/Modal";
 import type { DailyStats, EndlessStats } from "@/types/wordle";
 import { useEffect, useState } from "react";
-import { WORDLE_MAX_ATTEMPTS } from "./constants";
 import DefinitionButton from "./DefinitionButton";
+import DailyStatsView from "./DailyStatsView";
+import EndlessStatsView from "./EndlessStatsView";
 const API_URL = import.meta.env.VITE_API_URL;
 
 type WordleResultModalProps = {
@@ -22,7 +23,6 @@ export default function WordleResultModal({
   solved,
   hiddenWord,
   attempts,
-  streak,
   onClose,
   onPlayAgain,
 }: WordleResultModalProps) {
@@ -56,34 +56,12 @@ export default function WordleResultModal({
           </p>
           <DefinitionButton word={hiddenWord} font="font-mono" />
         </div>
-        {mode === "daily" && solved && attempts && (
-          <p className="text-text/70">Solved in {attempts}</p>
-        )}
-        {mode === "endless" && solved && attempts && (
-          <p className="text-text/70">Streak: {streak}</p>
-        )}
         {stats && mode === "daily" && "attempts" in stats && (
-          <div className="w-64">
-            {Array.from({ length: WORDLE_MAX_ATTEMPTS }, (_, i) => i).map(
-              (attempt) => (
-                <div className="flex flex-row gap-1">
-                  <span>{attempt + 1}</span>
-                  <span
-                    className={`h-5 flex justify-end items-center px-1 min-w-4 ${attempt + 1 === attempts ? "bg-accent" : "bg-surface-card"}`}
-                    style={{
-                      width: `${(stats.attempts[attempt] / Math.max(...stats.attempts)) * 100}%`,
-                    }}
-                  >
-                    <span
-                      className={`text-xs ${attempt + 1 === attempts ? "text-bg" : "text-text"}`}
-                    >
-                      {stats.attempts[attempt]}
-                    </span>
-                  </span>
-                </div>
-              ),
-            )}
-          </div>
+          <DailyStatsView stats={stats} attempts={attempts} />
+        )}
+
+        {stats && mode === "endless" && "totalStreak" in stats && (
+          <EndlessStatsView stats={stats} />
         )}
 
         {stats &&

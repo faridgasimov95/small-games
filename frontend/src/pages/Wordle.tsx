@@ -5,6 +5,7 @@ import {
 import DefinitionButton from "@/games/wordle/DefinitionButton";
 import WordleBoard from "@/games/wordle/WordleBoard";
 import WordleResultModal from "@/games/wordle/WordleResultModal";
+import { postData } from "@/utils/api";
 import { useState } from "react";
 import {
   useLoaderData,
@@ -41,16 +42,11 @@ export async function wordleLoader({
     }
   }
 
-  const response = await fetch(
+  const response = await postData(
     `${API_URL}/wordle/word?difficulty=${params.difficulty?.toLowerCase()}&mode=${params.mode?.toLowerCase()}`,
-    {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      ...(params.mode === "endless"
-        ? { body: JSON.stringify({ words: [] }) }
-        : {}),
-    },
+    params.mode === "endless" ? { words: [] } : undefined,
   );
+
   const hiddenWord = await response.text();
   return { hiddenWord, guesses: [] };
 }
@@ -88,18 +84,12 @@ export default function WordlePage() {
       if (gameOver) {
         setTimeout(() => setShowModal(true), 1000);
         try {
-          const response = await fetch(`${API_URL}/wordle/stats`, {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-              mode: "daily",
-              difficulty: params.difficulty,
-              solved,
-              date: today,
-              ...(solved && { attempts: guesses.length }),
-            }),
+          const response = await postData(`${API_URL}/wordle/stats`, {
+            mode: "daily",
+            difficulty: params.difficulty!,
+            solved,
+            date: today,
+            ...(solved && { attempts: guesses.length }),
           });
 
           if (!response.ok) {
@@ -152,16 +142,10 @@ export default function WordlePage() {
       if (gameOver) {
         setTimeout(() => setShowModal(true), 1000);
         try {
-          const response = await fetch(`${API_URL}/wordle/stats`, {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-              mode: "endless",
-              difficulty: params.difficulty,
-              streak,
-            }),
+          const response = await postData(`${API_URL}/wordle/stats`, {
+            mode: "endless",
+            difficulty: params.difficulty!,
+            streak,
           });
 
           if (!response.ok) {
@@ -179,15 +163,9 @@ export default function WordlePage() {
   async function handleNext(usedWordsOverride?: string[]) {
     const wordsToExclude = usedWordsOverride ?? currentUsedWords;
     setEndlessSolved(false);
-    const response = await fetch(
+    const response = await postData(
       `${API_URL}/wordle/word?difficulty=${params.difficulty?.toLowerCase()}&mode=${params.mode?.toLowerCase()}`,
-      {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        ...(params.mode === "endless"
-          ? { body: JSON.stringify({ words: wordsToExclude }) }
-          : {}),
-      },
+      params.mode === "endless" ? { words: wordsToExclude } : undefined,
     );
     const newWord = await response.text();
     setCurrentHiddenWord(newWord);
