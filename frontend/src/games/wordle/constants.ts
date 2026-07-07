@@ -1,2 +1,5 @@
 export const WORDLE_MAX_ATTEMPTS = 6;
 export const ENDLESS_HISTORY_LIMIT = 200;
+export const TILES_REVEAL_DELAY_STEP = 100;
+export const TILES_REVEAL_DELAY_BASE = 250;
+export const ON_PUZZLE_COMPLETED_DELAY = 1000;

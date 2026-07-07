@@ -1,6 +1,7 @@
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import HomePage from "./pages/Home";
-import WordlePage, { wordleLoader } from "./pages/Wordle";
+import WordlePage from "./pages/Wordle";
+import { wordleLoader } from "./games/wordle/useWordleGame";
 
 const router = createBrowserRouter([
   {
