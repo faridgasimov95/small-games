@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { TILES_REVEAL_DELAY_BASE } from "./constants";
 
 export type LetterStatus = "correct" | "present" | "absent" | null;
 
@@ -29,7 +30,7 @@ export default function WordleTile({
 
     const timer = setTimeout(() => {
       setRevealed(true);
-    }, revealDelay + 250);
+    }, revealDelay + TILES_REVEAL_DELAY_BASE);
 
     return () => clearTimeout(timer);
   }, [status, revealDelay]);

@@ -1,3 +1,4 @@
+import { TILES_REVEAL_DELAY_STEP } from "./constants";
 import WordleTile, { type LetterStatus } from "./WordleTile";
 
 type WordleRowProps =
@@ -62,7 +63,7 @@ export default function WordleRow({
             key={i}
             letter={letter}
             status={isSubmitted ? statuses[i] : null}
-            revealDelay={i * 100}
+            revealDelay={i * TILES_REVEAL_DELAY_STEP}
           ></WordleTile>
         ),
       )}
