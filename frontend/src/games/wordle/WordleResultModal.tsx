@@ -63,12 +63,6 @@ export default function WordleResultModal({
         {stats && mode === "endless" && "totalStreak" in stats && (
           <EndlessStatsView stats={stats} />
         )}
-
-        {stats &&
-          mode === "endless" &&
-          "totalStreak" in stats &&
-          // render endless stats
-          null}
         <div className="flex gap-2">
           <button
             onClick={onClose}
