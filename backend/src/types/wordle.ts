@@ -23,9 +23,17 @@ export type DailyStats = {
 };
 
 export type EndlessStats = {
-  totalStreak: number;
+  resultCounts: EndlessResults;
+};
+
+export type EndlessResults = {
+  [result: number]: number;
+};
+
+export type EndlessStatsCalculated = {
   gamesPlayed: number;
   maxStreak: number;
+  percentile: number;
 };
 
 export type GlobalWordleStats = {

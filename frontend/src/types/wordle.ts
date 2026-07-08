@@ -5,9 +5,9 @@ export type DailyStats = {
 };
 
 export type EndlessStats = {
-  totalStreak: number;
   gamesPlayed: number;
   maxStreak: number;
+  percentile: number;
 };
 
 export type WordDefinition = {

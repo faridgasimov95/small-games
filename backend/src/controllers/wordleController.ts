@@ -6,6 +6,7 @@ import {
   writeData,
   loadJson as loadWords,
   getHistory,
+  calculateEndlessStats,
 } from "../utils/wordUtils";
 import {
   Difficulty,
@@ -132,7 +133,9 @@ export const fetchStats = async (
       const stats = todayStats[difficulty];
       res.send(stats);
     } else if (mode === "endless") {
-      const stats = globalStats.endless[difficulty];
+      const streak = Number(req.query.streak);
+      const resultCounts = globalStats.endless[difficulty].resultCounts;
+      const stats = calculateEndlessStats(resultCounts, streak);
       res.send(stats);
     }
   } catch (err) {

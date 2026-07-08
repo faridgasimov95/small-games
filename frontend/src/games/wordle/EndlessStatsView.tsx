@@ -15,8 +15,9 @@ export default function EndlessStatsView({ stats }: EndlessStatsViewProps) {
         Best streak: <span className="text-accent">{stats.maxStreak}</span>
       </p>
       <p>
-        Total streak (all-time solves):{" "}
-        <span className="text-accent">{stats.totalStreak}</span>
+        You're better than{" "}
+        <span className="text-accent">{stats.percentile.toFixed(0)}%</span> of
+        players
       </p>
     </div>
   );

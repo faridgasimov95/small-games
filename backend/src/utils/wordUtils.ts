@@ -1,6 +1,11 @@
 import fs from "fs";
 import path from "path";
-import { DailyWords, Difficulty } from "../types/wordle";
+import {
+  DailyWords,
+  Difficulty,
+  EndlessResults,
+  EndlessStatsCalculated,
+} from "../types/wordle";
 
 export const loadJson = <T>(foldername: string, filename: string): T[] => {
   try {
@@ -78,3 +83,23 @@ export const getHistory = (
 
   return words;
 };
+
+export function calculateEndlessStats(
+  resultCounts: EndlessResults,
+  streak: number,
+): EndlessStatsCalculated {
+  let gamesPlayed = 0;
+  let maxStreak = 0;
+  let countAtOrBelow = 0;
+
+  for (const key in resultCounts) {
+    const value = Number(key);
+    gamesPlayed += resultCounts[key];
+    if (value > maxStreak) maxStreak = value;
+    if (value <= streak) countAtOrBelow += resultCounts[key];
+  }
+
+  const percentile = gamesPlayed > 0 ? (countAtOrBelow / gamesPlayed) * 100 : 0;
+
+  return { gamesPlayed, maxStreak, percentile };
+}

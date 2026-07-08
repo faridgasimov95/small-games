@@ -18,6 +18,7 @@ export const saveGlobalWordleStats = (
         medium: { attempts: [0, 0, 0, 0, 0, 0], solved: 0, total: 0 },
         hard: { attempts: [0, 0, 0, 0, 0, 0], solved: 0, total: 0 },
       };
+
       newStats = {
         ...globalStats,
         daily: {
@@ -39,21 +40,18 @@ export const saveGlobalWordleStats = (
         },
       };
     } else if (gameStats.mode === "endless") {
+      const { difficulty, streak } = gameStats;
+      const existingCounts = globalStats.endless[difficulty].resultCounts;
+
       newStats = {
         ...globalStats,
         endless: {
           ...globalStats.endless,
-          [gameStats.difficulty]: {
-            totalStreak:
-              globalStats.endless[gameStats.difficulty].totalStreak +
-              gameStats.streak,
-            gamesPlayed:
-              globalStats.endless[gameStats.difficulty].gamesPlayed + 1,
-            maxStreak:
-              gameStats.streak >
-              globalStats.endless[gameStats.difficulty].maxStreak
-                ? gameStats.streak
-                : globalStats.endless[gameStats.difficulty].maxStreak,
+          [difficulty]: {
+            resultCounts: {
+              ...existingCounts,
+              [streak]: (existingCounts[streak] ?? 0) + 1,
+            },
           },
         },
       };

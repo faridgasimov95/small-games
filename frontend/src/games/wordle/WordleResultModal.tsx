@@ -23,6 +23,7 @@ export default function WordleResultModal({
   solved,
   hiddenWord,
   attempts,
+  streak,
   onClose,
   onPlayAgain,
 }: WordleResultModalProps) {
@@ -30,8 +31,9 @@ export default function WordleResultModal({
 
   useEffect(() => {
     const fetchStats = async () => {
+      const streakParam = mode === "endless" ? `&streak=${streak}` : "";
       const response = await fetch(
-        `${API_URL}/wordle/stats?difficulty=${difficulty}&mode=${mode}`,
+        `${API_URL}/wordle/stats?difficulty=${difficulty}&mode=${mode}${streakParam}`,
       );
       const data = await response.json();
 
@@ -39,7 +41,7 @@ export default function WordleResultModal({
     };
 
     fetchStats();
-  }, [mode, difficulty]);
+  }, [mode, difficulty, streak]);
 
   return (
     <Modal onClose={onClose}>
@@ -60,7 +62,7 @@ export default function WordleResultModal({
           <DailyStatsView stats={stats} attempts={attempts} />
         )}
 
-        {stats && mode === "endless" && "totalStreak" in stats && (
+        {stats && mode === "endless" && "percentile" in stats && (
           <EndlessStatsView stats={stats} />
         )}
         <div className="flex gap-2">
