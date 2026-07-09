@@ -14,9 +14,11 @@ export default function EndlessStatsView({
       <p>
         Current streak: <span className="text-accent">{currentStreak}</span>
       </p>
+      <p className="text-text/50 text-sm uppercase tracking-wide">
+        Global stats
+      </p>
       <p>
-        Total games played:{" "}
-        <span className="text-accent">{stats.gamesPlayed}</span>
+        Games played: <span className="text-accent">{stats.gamesPlayed}</span>
       </p>
       <p>
         Best streak: <span className="text-accent">{stats.maxStreak}</span>
