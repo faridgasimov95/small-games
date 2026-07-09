@@ -56,7 +56,7 @@ export default function WordleResultModal({
               {hiddenWord.toUpperCase()}
             </span>
           </p>
-          <DefinitionButton word={hiddenWord} font="font-mono" />
+          <DefinitionButton word={hiddenWord} font="font-mono" compact />
         </div>
         {stats && mode === "daily" && "attempts" in stats && (
           <DailyStatsView stats={stats} attempts={attempts} />

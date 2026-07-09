@@ -4,19 +4,22 @@ import WordDefinitionModal from "./WordDefinitionModal";
 type DefinitionButtonProps = {
   word: string;
   font: string;
+  compact?: boolean;
 };
 
 export default function DefinitionButton({
   word,
   font,
+  compact = false,
 }: DefinitionButtonProps) {
   const [showModal, setShowModal] = useState(false);
+  const sizeClasses = compact ? "px-1 py-0.5 text-xs" : "px-2 py-1";
 
   return (
     <>
       <button
         onClick={() => setShowModal(true)}
-        className={`px-2 py-1 bg-accent text-bg ${font} cursor-pointer`}
+        className={`bg-accent text-bg ${sizeClasses} ${font} cursor-pointer`}
       >
         Definition
       </button>
