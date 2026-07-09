@@ -60,6 +60,7 @@ export function useWordleGame() {
   const [endlessSolved, setEndlessSolved] = useState(
     currentGuesses[currentGuesses.length - 1] === currentHiddenWord,
   );
+  const [round, setRound] = useState((currentStreak ?? 0) + 1);
 
   const isSolved =
     currentGuesses[currentGuesses.length - 1] === currentHiddenWord;
@@ -156,7 +157,7 @@ export function useWordleGame() {
     }
   }
 
-  async function handleNext(usedWordsOverride?: string[]) {
+  async function handleNext(usedWordsOverride?: string[], nextRound?: number) {
     const wordsToExclude = usedWordsOverride ?? currentUsedWords;
     setEndlessSolved(false);
     const response = await postData(
@@ -167,13 +168,14 @@ export function useWordleGame() {
     setCurrentHiddenWord(newWord);
     setCurrentGuesses([]);
     setBoardKey((prev) => prev + 1);
+    setRound(nextRound ?? round + 1);
   }
 
   function handlePlayAgain() {
     setStreak(0);
     setCurrentUsedWords([]);
     setShowModal(false);
-    handleNext([]);
+    handleNext([], 1);
   }
 
   return {
@@ -186,6 +188,7 @@ export function useWordleGame() {
     showModal,
     streak,
     isSolved,
+    round,
     handleGuessSubmit,
     handleNext,
     handlePlayAgain,

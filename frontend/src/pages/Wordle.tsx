@@ -14,6 +14,7 @@ export default function WordlePage() {
     showModal,
     streak,
     isSolved,
+    round,
     handleGuessSubmit,
     handleNext,
     handlePlayAgain,
@@ -23,10 +24,13 @@ export default function WordlePage() {
   return (
     <>
       <div className="flex flex-col gap-2 min-h-screen items-center pt-10">
-        <div className="flex flex-col items-center">
+        <div className="flex flex-col items-center gap-1">
           <h2 className="font-mono text-text/50">
             {params.mode?.toUpperCase()} MODE
           </h2>
+          {params.mode === "endless" && (
+            <p className="font-mono text-text/50 text-sm">Round {round}</p>
+          )}
           <h1 className="flex justify-center gap-2">
             <span className="font-pixel text-accent text-xl">WORDLE</span>
             <span className="bg-accent px-2 py-0.5 rounded-xl text-sm text-bg ">
