@@ -2,11 +2,18 @@ import type { EndlessStats } from "@/types/wordle";
 
 type EndlessStatsViewProps = {
   stats: EndlessStats;
+  currentStreak: number;
 };
 
-export default function EndlessStatsView({ stats }: EndlessStatsViewProps) {
+export default function EndlessStatsView({
+  stats,
+  currentStreak,
+}: EndlessStatsViewProps) {
   return (
     <div className="flex flex-col gap-1 font-mono text-sm text-text/70">
+      <p>
+        Current streak: <span className="text-accent">{currentStreak}</span>
+      </p>
       <p>
         Total games played:{" "}
         <span className="text-accent">{stats.gamesPlayed}</span>

@@ -63,7 +63,7 @@ export default function WordleResultModal({
         )}
 
         {stats && mode === "endless" && "percentile" in stats && (
-          <EndlessStatsView stats={stats} />
+          <EndlessStatsView stats={stats} currentStreak={streak ?? 0} />
         )}
         <div className="flex gap-2">
           <button
