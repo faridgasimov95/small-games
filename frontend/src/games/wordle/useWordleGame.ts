@@ -6,7 +6,7 @@ import {
 } from "react-router-dom";
 import { ENDLESS_HISTORY_LIMIT, WORDLE_MAX_ATTEMPTS } from "./constants";
 import { postData } from "@/utils/api";
-import { cleanStaleDailyCache } from "@/utils/storage";
+import { clearStaleDailyCache } from "@/utils/storage";
 
 const API_URL = import.meta.env.VITE_API_URL;
 
@@ -22,7 +22,7 @@ export async function wordleLoader({
 }: LoaderFunctionArgs): Promise<WordleLoaderData> {
   if (params.mode === "daily") {
     const today = new Date().toISOString().split("T")[0];
-    cleanStaleDailyCache(today);
+    clearStaleDailyCache(today);
     const storageKey = `wordle-daily-${params.difficulty}-${today}`;
     const savedResult = localStorage.getItem(storageKey);
     if (savedResult) {

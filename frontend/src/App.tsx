@@ -3,7 +3,7 @@ import HomePage from "./pages/Home";
 import WordlePage from "./pages/Wordle";
 import { wordleLoader } from "./games/wordle/useWordleGame";
 import { useEffect } from "react";
-import { cleanStaleDailyCache } from "./utils/storage";
+import { clearStaleDailyCache, clearDefinitionCache } from "./utils/storage";
 
 const router = createBrowserRouter([
   {
@@ -22,7 +22,8 @@ const router = createBrowserRouter([
 export default function App() {
   useEffect(() => {
     const today = new Date().toISOString().split("T")[0];
-    cleanStaleDailyCache(today);
+    clearStaleDailyCache(today);
+    clearDefinitionCache();
   }, []);
 
   return (
