@@ -57,7 +57,11 @@ export function useWordleGame() {
   const [boardKey, setBoardKey] = useState(0);
   const [currentHiddenWord, setCurrentHiddenWord] = useState(hiddenWord);
   const [streak, setStreak] = useState(currentStreak ?? 0);
-  const [showModal, setShowModal] = useState(false);
+  const [showModal, setShowModal] = useState(
+    params.mode === "daily" &&
+      (guesses.length === WORDLE_MAX_ATTEMPTS ||
+        guesses[guesses.length - 1] === hiddenWord),
+  );
   const [currentUsedWords, setCurrentUsedWords] = useState(usedWords ?? []);
   const [endlessSolved, setEndlessSolved] = useState(
     currentGuesses[currentGuesses.length - 1] === currentHiddenWord,
