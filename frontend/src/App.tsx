@@ -4,19 +4,25 @@ import WordlePage from "./pages/Wordle";
 import { wordleLoader } from "./games/wordle/useWordleGame";
 import { useEffect } from "react";
 import { clearStaleDailyCache, clearDefinitionCache } from "./utils/storage";
+import Layout from "./components/Layout";
 
 const router = createBrowserRouter([
   {
-    path: "/",
-    element: <HomePage />,
+    element: <Layout />,
+    children: [
+      {
+        path: "/",
+        element: <HomePage />,
+      },
+      {
+        path: "wordle/:difficulty/:mode",
+        element: <WordlePage />,
+        loader: wordleLoader,
+      },
+      { path: "hangman/:difficulty/:mode", element: <div>Hangman</div> },
+      { path: "finder/:difficulty/:mode", element: <div>Finder</div> },
+    ],
   },
-  {
-    path: "wordle/:difficulty/:mode",
-    element: <WordlePage />,
-    loader: wordleLoader,
-  },
-  { path: "hangman/:difficulty/:mode", element: <div>Hangman</div> },
-  { path: "finder/:difficulty/:mode", element: <div>Finder</div> },
 ]);
 
 export default function App() {
