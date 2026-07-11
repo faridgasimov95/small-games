@@ -5,6 +5,7 @@ import { wordleLoader } from "./games/wordle/useWordleGame";
 import { useEffect } from "react";
 import { clearStaleDailyCache, clearDefinitionCache } from "./utils/storage";
 import Layout from "./components/Layout";
+import AllStatsPage from "./pages/AllStats";
 
 const router = createBrowserRouter([
   {
@@ -14,6 +15,7 @@ const router = createBrowserRouter([
         path: "/",
         element: <HomePage />,
       },
+      { path: "/stats", element: <AllStatsPage /> },
       {
         path: "wordle/:difficulty/:mode",
         element: <WordlePage />,

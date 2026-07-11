@@ -14,3 +14,7 @@ export type WordDefinition = {
   partOfSpeech: string;
   definition: string;
 };
+
+export type EndlessResults = {
+  [result: number]: number;
+};

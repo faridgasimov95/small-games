@@ -1,5 +1,5 @@
-export type Difficulty = "Easy" | "Medium" | "Hard";
-export type Mode = "Daily" | "Endless";
+export type Difficulty = "easy" | "medium" | "hard";
+export type Mode = "daily" | "endless";
 
 export type Game = {
   id: string;

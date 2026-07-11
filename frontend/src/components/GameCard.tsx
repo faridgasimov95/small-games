@@ -1,4 +1,5 @@
 import { type Difficulty, type Game, type Mode } from "@/types/game";
+import { capitalize } from "@/utils/helpers";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
@@ -43,7 +44,7 @@ export default function GameCard({ game }: { game: Game }) {
                       : "bg-surface-card text-text hover:bg-accent hover:text-bg"
                   }`}
                 >
-                  {d}
+                  {capitalize(d)}
                 </li>
               ))}
             </ul>
@@ -61,7 +62,7 @@ export default function GameCard({ game }: { game: Game }) {
                       : "bg-surface-card text-text hover:bg-accent hover:text-bg"
                   }`}
                 >
-                  {m}
+                  {capitalize(m)}
                 </li>
               ))}
             </ul>
