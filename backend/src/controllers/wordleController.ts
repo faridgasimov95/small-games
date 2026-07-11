@@ -150,3 +150,21 @@ export const fetchStats = async (
     }
   }
 };
+
+export const fetchEndlessDistribution = async (
+  req: Request,
+  res: Response,
+): Promise<void> => {
+  try {
+    const difficulty = req.query.difficulty as Difficulty;
+    const globalStats = loadData<GlobalWordleStats>(
+      "../data/wordle/wordleStats.json",
+    );
+    const { resultCounts } = globalStats.endless[difficulty];
+
+    res.send({ resultCounts });
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({ error: "Internal server error" });
+  }
+};
