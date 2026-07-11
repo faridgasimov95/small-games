@@ -4,20 +4,20 @@ const games: Game[] = [
   {
     id: "01",
     name: "Wordle",
-    difficulties: ["Easy", "Medium", "Hard"],
-    modes: ["Daily", "Endless"],
+    difficulties: ["easy", "medium", "hard"],
+    modes: ["daily", "endless"],
   },
   {
     id: "02",
     name: "Hangman",
-    difficulties: ["Easy", "Medium", "Hard"],
-    modes: ["Daily", "Endless"],
+    difficulties: ["easy", "medium", "hard"],
+    modes: ["daily", "endless"],
   },
   {
     id: "03",
     name: "Wordsmith",
-    difficulties: ["Easy", "Medium", "Hard"],
-    modes: ["Daily", "Endless"],
+    difficulties: ["easy", "medium", "hard"],
+    modes: ["daily", "endless"],
   },
 ];
 
