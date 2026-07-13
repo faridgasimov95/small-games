@@ -9,7 +9,11 @@ export default function NavBar() {
       <NavLink
         to="/stats"
         className={({ isActive }) =>
-          `font-mono text-sm ${isActive ? "text-accent" : "text-text/70 hover:text-text"}`
+          `px-3 py-1 rounded-sm font-mono text-sm border transition-colors ${
+            isActive
+              ? "bg-accent text-bg border-accent"
+              : "border-divider text-text/70 hover:border-accent hover:text-text"
+          }`
         }
       >
         Statistics
