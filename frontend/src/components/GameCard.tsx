@@ -18,12 +18,12 @@ export default function GameCard({ game }: { game: Game }) {
   }
 
   return (
-    <div className="bg-surface rounded-sm px-4 py-3 border border-divider border-x-4 border-x-accent hover:bg-surface-hover transition-colors ">
+    <div className="bg-surface rounded-sm border border-divider border-x-4 border-x-accent hover:bg-surface-hover transition-colors ">
       <button
         onClick={() => setExpanded((prev) => !prev)}
-        className="w-full text-left flex gap-1 justify-between"
+        className="w-full h-full text-left flex gap-1 justify-between px-4 py-3"
       >
-        <h2 className="font-pixel text-text">{game.name}</h2>
+        <h2 className="font-pixel text-text">{capitalize(game.name)}</h2>
         <span className={expanded ? "rotate-90 inline-block" : "inline-block"}>
           ›
         </span>
