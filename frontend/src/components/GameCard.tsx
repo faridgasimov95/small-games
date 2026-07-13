@@ -12,9 +12,7 @@ export default function GameCard({ game }: { game: Game }) {
 
   function handlePlay() {
     if (!selectedDifficulty || !selectedMode) return;
-    navigate(
-      `/${game.name.toLowerCase()}/${selectedDifficulty.toLowerCase()}/${selectedMode.toLowerCase()}`,
-    );
+    navigate(`/${game.name}/${selectedDifficulty}/${selectedMode}`);
   }
 
   return (
@@ -29,7 +27,7 @@ export default function GameCard({ game }: { game: Game }) {
         </span>
       </button>
       {expanded && (
-        <div className="flex flex-col gap-2 mt-3">
+        <div className="flex flex-col gap-2 mt-3 px-4 py-2">
           <div className="flex gap-2">
             <ul className="flex flex-col gap-1 flex-1">
               {game.difficulties.map((d) => (
