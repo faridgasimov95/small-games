@@ -38,21 +38,18 @@ export const saveGlobalHangmanStats = (
         },
       };
     } else if (gameStats.mode === "endless") {
+      const { difficulty, streak } = gameStats;
+      const existingCounts = globalStats.endless[difficulty].resultCounts;
+
       newStats = {
         ...globalStats,
         endless: {
           ...globalStats.endless,
           [gameStats.difficulty]: {
-            totalStreak:
-              globalStats.endless[gameStats.difficulty].totalStreak +
-              gameStats.streak,
-            gamesPlayed:
-              globalStats.endless[gameStats.difficulty].gamesPlayed + 1,
-            maxStreak:
-              gameStats.streak >
-              globalStats.endless[gameStats.difficulty].maxStreak
-                ? gameStats.streak
-                : globalStats.endless[gameStats.difficulty].maxStreak,
+            resultCounts: {
+              ...existingCounts,
+              [streak]: (existingCounts[streak] ?? 0) + 1,
+            },
           },
         },
       };
