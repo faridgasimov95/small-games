@@ -1,11 +1,16 @@
 import fs from "fs";
 import path from "path";
 import {
+  DAILY_HISTORY_LIMIT,
+  ENDLESS_HISTORY_LIMIT,
+} from "../data/shared/constants";
+import type {
   DailyWords,
   Difficulty,
+  Mode,
   EndlessResults,
   EndlessStatsCalculated,
-} from "../types/wordle";
+} from "../types/shared";
 
 export const loadJson = <T>(foldername: string, filename: string): T[] => {
   try {
@@ -102,4 +107,45 @@ export function calculateEndlessStats(
   const percentile = gamesPlayed > 0 ? (countAtOrBelow / gamesPlayed) * 100 : 0;
 
   return { gamesPlayed, maxStreak, percentile };
+}
+
+export function getWordForMode(
+  mode: Mode,
+  difficulty: Difficulty,
+  words: string[],
+  dailyWordsPath: string,
+  usedWords: string[] = [],
+): string {
+  if (mode === "daily") {
+    const todayDate = new Date().toISOString().split("T")[0];
+    const stored = loadData<DailyWords>(dailyWordsPath);
+    const base: DailyWords =
+      stored.date === todayDate
+        ? stored
+        : { ...stored, date: todayDate, easy: null, medium: null, hard: null };
+
+    let word = base[difficulty];
+
+    if (word === null) {
+      do {
+        word = getRandom(words);
+      } while (getHistory(base, difficulty).includes(word));
+
+      writeData(dailyWordsPath, {
+        ...base,
+        [difficulty]: word,
+        [difficulty + "History"]: [...getHistory(base, difficulty), word].slice(
+          -DAILY_HISTORY_LIMIT,
+        ),
+      });
+    }
+    return word;
+  }
+
+  const recentSet = new Set(usedWords.slice(-ENDLESS_HISTORY_LIMIT));
+  let word = getRandom(words);
+  while (recentSet.has(word)) {
+    word = getRandom(words);
+  }
+  return word;
 }

@@ -1,23 +1,12 @@
 import { Request, Response } from "express";
 import { saveGlobalWordleStats as saveStats } from "../services/wordleService";
 import {
-  getRandom as getWord,
   loadData,
-  writeData,
   loadJson as loadWords,
-  getHistory,
   calculateEndlessStats,
+  getWordForMode,
 } from "../utils/wordUtils";
-import {
-  Difficulty,
-  GlobalWordleStats,
-  DailyWords,
-  Mode,
-} from "../types/wordle";
-import {
-  DAILY_HISTORY_LIMIT,
-  ENDLESS_HISTORY_LIMIT,
-} from "../data/wordle/constants";
+import { Difficulty, GlobalWordleStats, Mode } from "../types/wordle";
 
 const wordsEasy = loadWords<string>("wordle", "easy.json");
 const wordsMedium = loadWords<string>("wordle", "medium.json");
@@ -36,48 +25,14 @@ export const fetchWord = async (req: Request, res: Response): Promise<void> => {
   const words = wordLists[difficulty];
   try {
     if (!words) throw new Error(`Invalid difficulty: ${difficulty}`);
-
-    if (mode === "daily") {
-      const todayDate = new Date().toISOString().split("T")[0];
-      const stored = loadData<DailyWords>("../data/wordle/dailyWords.json");
-      const base: DailyWords =
-        stored.date === todayDate
-          ? stored
-          : {
-              ...stored,
-              date: todayDate,
-              easy: null,
-              medium: null,
-              hard: null,
-            };
-
-      let word = base[difficulty];
-
-      if (word === null) {
-        do {
-          word = getWord(words);
-        } while (getHistory(base, difficulty).includes(word));
-
-        writeData("../data/wordle/dailyWords.json", {
-          ...base,
-          [difficulty]: word,
-          [difficulty + "History"]: [
-            ...getHistory(base, difficulty),
-            word,
-          ].slice(-DAILY_HISTORY_LIMIT),
-        });
-      }
-      res.send(word);
-    } else if (mode === "endless") {
-      const recentWords = data.words.slice(-ENDLESS_HISTORY_LIMIT);
-      const recentSet = new Set(recentWords);
-
-      let word = getWord(words);
-      while (recentSet.has(word)) {
-        word = getWord(words);
-      }
-      res.send(word);
-    }
+    const word = getWordForMode(
+      mode,
+      difficulty,
+      words,
+      "../data/wordle/dailyWords.json",
+      data?.words,
+    );
+    res.send(word);
   } catch (e) {
     if (e instanceof Error && e.message.includes("Invalid difficulty")) {
       res.status(400).json({ error: e.message });

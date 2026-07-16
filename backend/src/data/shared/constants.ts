@@ -1,0 +1,2 @@
+export const DAILY_HISTORY_LIMIT = 365;
+export const ENDLESS_HISTORY_LIMIT = 200;

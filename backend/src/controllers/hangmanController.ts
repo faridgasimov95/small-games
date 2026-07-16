@@ -2,7 +2,7 @@ import { Request, Response } from "express";
 import { saveGlobalHangmanStats as saveStats } from "../services/hangmanService";
 import {
   calculateEndlessStats,
-  getRandom as getWord,
+  getWordForMode,
   loadData,
   loadJson as loadWords,
 } from "../utils/wordUtils";
@@ -19,11 +19,19 @@ const wordLists: Record<string, string[]> = {
 };
 
 export const fetchWord = async (req: Request, res: Response): Promise<void> => {
-  const difficulty = req.query.difficulty as string;
+  const difficulty = req.query.difficulty as Difficulty;
+  const mode = req.query.mode as Mode;
+  const data = req.body;
+  const words = wordLists[difficulty];
   try {
-    const words = wordLists[difficulty];
     if (!words) throw new Error(`Invalid difficulty: ${difficulty}`);
-    const word = getWord(words);
+    const word = getWordForMode(
+      mode,
+      difficulty,
+      words,
+      "../data/hangman/dailyWords.json",
+      data?.words,
+    );
     res.send(word);
   } catch (e) {
     if (e instanceof Error && e.message.includes("Invalid difficulty")) {

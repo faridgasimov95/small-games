@@ -1,6 +1,20 @@
-export type Difficulty = "easy" | "medium" | "hard";
+import type {
+  Difficulty,
+  Mode,
+  DailyWords,
+  EndlessResults,
+  EndlessStatsCalculated,
+  EndlessStats,
+} from "./shared";
 
-export type Mode = "daily" | "endless";
+export type {
+  Difficulty,
+  Mode,
+  DailyWords,
+  EndlessResults,
+  EndlessStatsCalculated,
+  EndlessStats,
+};
 
 export type DailyGameResult = {
   mode: "daily";
@@ -22,20 +36,6 @@ export type DailyStats = {
   total: number;
 };
 
-export type EndlessStats = {
-  resultCounts: EndlessResults;
-};
-
-export type EndlessResults = {
-  [result: number]: number;
-};
-
-export type EndlessStatsCalculated = {
-  gamesPlayed: number;
-  maxStreak: number;
-  percentile: number;
-};
-
 export type GlobalWordleStats = {
   daily: {
     [date: string]: {
@@ -49,14 +49,4 @@ export type GlobalWordleStats = {
     medium: EndlessStats;
     hard: EndlessStats;
   };
-};
-
-export type DailyWords = {
-  date: string;
-  easy: string | null;
-  medium: string | null;
-  hard: string | null;
-  easyHistory: string[];
-  mediumHistory: string[];
-  hardHistory: string[];
 };
