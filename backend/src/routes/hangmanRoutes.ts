@@ -15,7 +15,7 @@ import {
  */
 const router = Router();
 
-router.get("/word", fetchWord);
+router.post("/word", fetchWord);
 router.post("/stats", updateStats);
 router.get("/stats", fetchStats);
 router.get("/distribution", fetchEndlessDistribution);
