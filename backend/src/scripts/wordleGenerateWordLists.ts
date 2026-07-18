@@ -1,26 +1,3 @@
-// export {};
-
-// async function generateWordLists() {
-//   const data = await fetch(
-//     "https://api.datamuse.com/words?sp=???????&md=f&max=1000",
-//   );
-//   const response = await data.json();
-
-//   const wordsArr = response
-//     .map((obj: { word: string; tags: string[] }) => ({
-//       word: obj.word,
-//       freq: parseFloat(obj.tags?.[0]?.replace("f:", "") ?? "0"),
-//     }))
-//     .filter((obj: { word: string; freq: number }) => obj.freq < 1)
-//     .sort(
-//       (a: { word: string; freq: number }, b: { word: string; freq: number }) =>
-//         b.freq - a.freq,
-//     );
-//   return wordsArr;
-// }
-
-// generateWordLists().then((words) => console.log(words));
-
 import fs from "fs";
 import path from "path";
 import nlp from "compromise";
