@@ -7,6 +7,7 @@ import { clearStaleDailyCache, clearDefinitionCache } from "./utils/storage";
 import Layout from "./components/Layout";
 import AllStatsPage from "./pages/AllStats";
 import ErrorPage from "./pages/Error";
+import ComingSoonPage from "./pages/ComingSoon";
 
 const router = createBrowserRouter([
   {
@@ -22,8 +23,14 @@ const router = createBrowserRouter([
         element: <WordlePage />,
         loader: wordleLoader,
       },
-      { path: "hangman/:difficulty/:mode", element: <div>Hangman</div> },
-      { path: "finder/:difficulty/:mode", element: <div>Finder</div> },
+      {
+        path: "hangman/:difficulty/:mode",
+        element: <ComingSoonPage gameName="hangman" />,
+      },
+      {
+        path: "wordsmith/:difficulty/:mode",
+        element: <ComingSoonPage gameName="wordsmith" />,
+      },
       { path: "*", element: <ErrorPage /> },
     ],
   },
