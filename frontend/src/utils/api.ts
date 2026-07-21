@@ -1,12 +1,20 @@
 type WordFetchBody = { words: string[] };
 
-type DailyStatsBody = {
+type WordleDailyStatsBody = {
   mode: "daily";
   difficulty: string;
   solved: boolean;
   date: string;
   attempts?: number;
 };
+type HangmanDailyStatsBody = {
+  mode: "daily";
+  difficulty: string;
+  solved: boolean;
+  date: string;
+  mistakes: number;
+};
+type DailyStatsBody = WordleDailyStatsBody | HangmanDailyStatsBody;
 
 type EndlessStatsBody = {
   mode: "endless";
