@@ -1,40 +1,41 @@
-import Modal from "@/components/Modal";
-import type { DailyStats, EndlessStats } from "@/types/wordle";
-import { useEffect, useState } from "react";
-import DefinitionButton from "./DefinitionButton";
 import DailyStatsView from "@/components/DailyStatsView";
+import Modal from "@/components/Modal";
+import { useEffect, useState } from "react";
+import DefinitionButton from "../wordle/DefinitionButton";
+import { MAX_MISTAKES } from "./constants";
 import EndlessStatsView from "@/components/EndlessStatsView";
-import { WORDLE_MAX_ATTEMPTS } from "./constants";
+import type { DailyStats, EndlessStats } from "@/types/hangman";
+
 const API_URL = import.meta.env.VITE_API_URL;
 
-type WordleResultModalProps = {
+type HangmanResultModalProps = {
   mode: string;
   difficulty: string;
   solved: boolean;
   hiddenWord: string;
-  attempts?: number;
+  mistakes?: number;
   streak?: number;
   onClose: () => void;
   onPlayAgain?: () => void;
 };
 
-export default function WordleResultModal({
+export default function HangmanResultModal({
   mode,
   difficulty,
   solved,
   hiddenWord,
-  attempts,
+  mistakes,
   streak,
   onClose,
   onPlayAgain,
-}: WordleResultModalProps) {
+}: HangmanResultModalProps) {
   const [stats, setStats] = useState<DailyStats | EndlessStats | null>(null);
 
   useEffect(() => {
     const fetchStats = async () => {
       const streakParam = mode === "endless" ? `&streak=${streak}` : "";
       const response = await fetch(
-        `${API_URL}/wordle/stats?difficulty=${difficulty}&mode=${mode}${streakParam}`,
+        `${API_URL}/hangman/stats?difficulty=${difficulty}&mode=${mode}${streakParam}`,
       );
       const data = await response.json();
 
@@ -59,11 +60,11 @@ export default function WordleResultModal({
           </p>
           <DefinitionButton word={hiddenWord} font="font-mono" compact />
         </div>
-        {stats && mode === "daily" && "attempts" in stats && (
+        {stats && mode === "daily" && "mistakes" in stats && (
           <DailyStatsView
-            distribution={stats.attempts}
-            maxRounds={WORDLE_MAX_ATTEMPTS}
-            highlightRound={attempts}
+            distribution={stats.mistakes}
+            maxRounds={MAX_MISTAKES}
+            highlightRound={mistakes}
           />
         )}
 

@@ -70,7 +70,6 @@ export function useHangmanGame() {
 
   const [currentGuessedLetters, setCurrentGuessedLetters] =
     useState(guessedLetters);
-  const [boardKey, setBoardKey] = useState(0);
   const [currentHiddenWord, setCurrentHiddenWord] = useState(hiddenWord);
   const [streak, setStreak] = useState(currentStreak ?? 0);
   const [showModal, setShowModal] = useState(
@@ -200,7 +199,6 @@ export function useHangmanGame() {
     const newWord = await response.text();
     setCurrentHiddenWord(newWord);
     setCurrentGuessedLetters([]);
-    setBoardKey((prev) => prev + 1);
     setRound(nextRound ?? round + 1);
   }
 
@@ -215,12 +213,13 @@ export function useHangmanGame() {
     params,
     currentHiddenWord,
     currentGuessedLetters,
+    mistakes,
+    isSolved,
+    isLost,
     readOnly,
-    boardKey,
     endlessSolved,
     showModal,
     streak,
-    isSolved,
     round,
     handleLetterGuess,
     handleNext,

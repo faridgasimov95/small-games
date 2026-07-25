@@ -1,9 +1,10 @@
-import DailyStatsView from "@/games/wordle/DailyStatsView";
+import DailyStatsView from "@/components/DailyStatsView";
 import EndlessDistributionView from "@/games/wordle/EndlessDistributionView";
 import { type Difficulty, type GameName, type Mode } from "@/types/game";
 import type { DailyStats, EndlessResults } from "@/types/wordle";
 import { useEffect, useState } from "react";
 import games from "@/games/gamesList";
+import { WORDLE_MAX_ATTEMPTS } from "@/games/wordle/constants";
 
 const API_URL = import.meta.env.VITE_API_URL;
 const STATS_SUPPORTED_GAMES: GameName[] = ["wordle"];
@@ -97,7 +98,10 @@ export default function AllStatsPage() {
           </div>
 
           {mode === "daily" && dailyStats && (
-            <DailyStatsView stats={dailyStats} />
+            <DailyStatsView
+              distribution={dailyStats.attempts}
+              maxRounds={WORDLE_MAX_ATTEMPTS}
+            />
           )}
           {mode === "endless" && resultCounts && (
             <EndlessDistributionView resultCounts={resultCounts} />

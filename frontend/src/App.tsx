@@ -8,6 +8,8 @@ import Layout from "./components/Layout";
 import AllStatsPage from "./pages/AllStats";
 import ErrorPage from "./pages/Error";
 import ComingSoonPage from "./pages/ComingSoon";
+import HangmanPage from "./pages/Hangman";
+import { hangmanLoader } from "./games/hangman/useHangmanGame";
 
 const router = createBrowserRouter([
   {
@@ -25,7 +27,8 @@ const router = createBrowserRouter([
       },
       {
         path: "hangman/:difficulty/:mode",
-        element: <ComingSoonPage gameName="hangman" />,
+        element: <HangmanPage />,
+        loader: hangmanLoader,
       },
       {
         path: "wordsmith/:difficulty/:mode",

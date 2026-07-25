@@ -1,4 +1,4 @@
-import type { EndlessStats } from "@/types/wordle";
+import type { EndlessStats } from "@/types/shared";
 
 type EndlessStatsViewProps = {
   stats: EndlessStats;
