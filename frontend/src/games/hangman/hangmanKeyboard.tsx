@@ -46,7 +46,7 @@ export default function HangmanKeyboard({
                 key={letter}
                 onClick={() => onGuess(letter)}
                 disabled={readOnly || guessed}
-                className={`w-8 h-10 text-sm uppercase rounded-sm transition-colors ${
+                className={`w-8 h-10 m-0.5 text-sm uppercase rounded-sm transition-colors ${
                   guessed
                     ? correct
                       ? "bg-accent text-bg"
