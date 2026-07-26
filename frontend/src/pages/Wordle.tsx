@@ -1,3 +1,4 @@
+import EndlessNextControls from "@/components/EndlessNextControls";
 import DefinitionButton from "@/games/wordle/DefinitionButton";
 import { useWordleGame } from "@/games/wordle/useWordleGame";
 import WordleBoard from "@/games/wordle/WordleBoard";
@@ -31,7 +32,7 @@ export default function WordlePage() {
           {params.mode === "endless" && (
             <p className="font-mono text-text/50 text-sm">Round {round}</p>
           )}
-          <h1 className="flex justify-center gap-2">
+          <h1 className="flex justify-center gap-2 mt-2">
             <span className="font-pixel text-accent text-xl">WORDLE</span>
             <span className="bg-accent px-2 py-0.5 rounded-xl text-sm text-bg ">
               {params.difficulty?.toUpperCase()}
@@ -46,15 +47,10 @@ export default function WordlePage() {
           key={boardKey}
         />
         {params.mode === "endless" && endlessSolved && (
-          <div className="flex gap-2">
-            <button
-              className="px-4 py-2 bg-accent text-bg font-pixel transition-opacity cursor-pointer"
-              onClick={() => handleNext()}
-            >
-              Next
-            </button>
-            <DefinitionButton word={currentHiddenWord} font="font-pixel" />
-          </div>
+          <EndlessNextControls
+            word={currentHiddenWord}
+            onNext={() => handleNext()}
+          />
         )}
       </div>
       {showModal && (

@@ -1,3 +1,4 @@
+import EndlessNextControls from "@/components/EndlessNextControls";
 import HangmanFigure from "@/games/hangman/hangmanFigure";
 import HangmanKeyboard from "@/games/hangman/hangmanKeyboard";
 import HangmanResultModal from "@/games/hangman/HangmanResultModal";
@@ -33,7 +34,7 @@ export default function HangmanPage() {
           {params.mode === "endless" && (
             <p className="font-mono text-text/50 text-sm">Round {round}</p>
           )}
-          <h1 className="flex justify-center gap-2">
+          <h1 className="flex justify-center gap-2 mt-2">
             <span className="font-pixel text-accent text-xl">HANGMAN</span>
             <span className="bg-accent px-2 py-0.5 rounded-xl text-sm text-bg ">
               {params.difficulty?.toUpperCase()}
@@ -52,15 +53,10 @@ export default function HangmanPage() {
           onGuess={handleLetterGuess}
         />
         {params.mode === "endless" && endlessSolved && (
-          <div className="flex gap-2">
-            <button
-              className="px-4 py-2 bg-accent text-bg font-pixel transition-opacity cursor-pointer"
-              onClick={() => handleNext()}
-            >
-              Next
-            </button>
-            <DefinitionButton word={currentHiddenWord} font="font-pixel" />
-          </div>
+          <EndlessNextControls
+            word={currentHiddenWord}
+            onNext={() => handleNext()}
+          />
         )}
       </div>
       {showModal && (

@@ -71,7 +71,7 @@ export default function HangmanFigure({ mistakes }: HangmanFigureProps) {
       {mistakes >= 4 && (
         <line
           x1="140"
-          y1="95"
+          y1="80"
           x2="120"
           y2="115"
           stroke="currentColor"
@@ -81,7 +81,7 @@ export default function HangmanFigure({ mistakes }: HangmanFigureProps) {
       {mistakes >= 5 && (
         <line
           x1="140"
-          y1="95"
+          y1="80"
           x2="160"
           y2="115"
           stroke="currentColor"
