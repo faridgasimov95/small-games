@@ -1,4 +1,4 @@
-import type { WordDefinition } from "@/types/wordle";
+import type { WordDefinition } from "@/types/shared";
 
 export async function fetchDefinition(
   word: string,

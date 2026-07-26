@@ -1,7 +1,7 @@
 import Modal from "@/components/Modal";
 import type { WordDefinition } from "@/types/shared";
 import { useEffect, useState } from "react";
-import { fetchDefinition } from "../games/wordle/dictionaryApi";
+import { fetchDefinition } from "@/utils/dictionaryApi";
 
 type WordDefinitionModalProps = {
   word: string;
