@@ -66,7 +66,7 @@ export default function WordDefinitionModal({
         )}
         <button
           onClick={onClose}
-          className="px-4 py-2 bg-accent text-bg font-pixel text-sm cursor-pointer"
+          className="px-4 py-2 bg-accent text-bg font-mono text-sm cursor-pointer"
         >
           Close
         </button>
