@@ -1,19 +1,24 @@
 import DailyStatsView from "@/components/DailyStatsView";
 import EndlessDistributionView from "@/games/wordle/EndlessDistributionView";
 import { type Difficulty, type GameName, type Mode } from "@/types/game";
-import type { DailyStats, EndlessResults } from "@/types/wordle";
+import type { EndlessResults } from "@/types/shared";
+import type { DailyStats as WordleDailyStats } from "@/types/wordle";
+import type { DailyStats as HangmanDailyStats } from "@/types/hangman";
 import { useEffect, useState } from "react";
 import games from "@/games/gamesList";
 import { WORDLE_MAX_ATTEMPTS } from "@/games/wordle/constants";
+import { MAX_MISTAKES } from "@/games/hangman/constants";
 
 const API_URL = import.meta.env.VITE_API_URL;
-const STATS_SUPPORTED_GAMES: GameName[] = ["wordle"];
+const STATS_SUPPORTED_GAMES: GameName[] = ["wordle", "hangman"];
 
 export default function AllStatsPage() {
   const [gameName, setGameName] = useState<GameName>("wordle");
   const [difficulty, setDifficulty] = useState<Difficulty>("easy");
   const [mode, setMode] = useState<Mode>("daily");
-  const [dailyStats, setDailyStats] = useState<DailyStats | null>(null);
+  const [dailyStats, setDailyStats] = useState<
+    WordleDailyStats | HangmanDailyStats | null
+  >(null);
   const [resultCounts, setResultCounts] = useState<EndlessResults | null>(null);
 
   const game = games.find((g) => g.name === gameName)!;
@@ -23,14 +28,17 @@ export default function AllStatsPage() {
     if (!statsSupported) return; // TODO: add other games stats fetching
 
     const fetchData = async () => {
+      setDailyStats(null);
+      setResultCounts(null);
+
       if (mode === "daily") {
         const response = await fetch(
-          `${API_URL}/wordle/stats?difficulty=${difficulty}&mode=daily`,
+          `${API_URL}/${gameName}/stats?difficulty=${difficulty}&mode=daily`,
         );
         setDailyStats(await response.json());
       } else {
         const response = await fetch(
-          `${API_URL}/wordle/distribution?difficulty=${difficulty}`,
+          `${API_URL}/${gameName}/distribution?difficulty=${difficulty}`,
         );
 
         const data = await response.json();
@@ -39,7 +47,7 @@ export default function AllStatsPage() {
     };
 
     fetchData();
-  }, [mode, difficulty]);
+  }, [gameName, mode, difficulty, statsSupported]);
 
   return (
     <div className="flex flex-col gap-4 items-center pt-10 min-h-screen">
@@ -49,7 +57,11 @@ export default function AllStatsPage() {
         {games.map((g) => (
           <button
             key={g.id}
-            onClick={() => setGameName(g.name)}
+            onClick={() => {
+              setDailyStats(null);
+              setResultCounts(null);
+              setGameName(g.name);
+            }}
             className={`px-3 py-1 font-mono text-sm cursor-pointer ${
               gameName === g.name ? "bg-accent text-bg" : "bg-surface text-text"
             }`}
@@ -99,8 +111,14 @@ export default function AllStatsPage() {
 
           {mode === "daily" && dailyStats && (
             <DailyStatsView
-              distribution={dailyStats.attempts}
-              maxRounds={WORDLE_MAX_ATTEMPTS}
+              distribution={
+                gameName === "hangman"
+                  ? (dailyStats as HangmanDailyStats).mistakes
+                  : (dailyStats as WordleDailyStats).attempts
+              }
+              maxRounds={
+                gameName === "hangman" ? MAX_MISTAKES : WORDLE_MAX_ATTEMPTS
+              }
             />
           )}
           {mode === "endless" && resultCounts && (
