@@ -1,5 +1,4 @@
 import EndlessNextControls from "@/components/EndlessNextControls";
-import DefinitionButton from "@/games/wordle/DefinitionButton";
 import { useWordleGame } from "@/games/wordle/useWordleGame";
 import WordleBoard from "@/games/wordle/WordleBoard";
 import WordleResultModal from "@/games/wordle/WordleResultModal";
@@ -49,6 +48,7 @@ export default function WordlePage() {
         {params.mode === "endless" && endlessSolved && (
           <EndlessNextControls
             word={currentHiddenWord}
+            game={"wordle"}
             onNext={() => handleNext()}
           />
         )}

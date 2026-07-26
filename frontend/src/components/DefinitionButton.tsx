@@ -3,12 +3,14 @@ import WordDefinitionModal from "./WordDefinitionModal";
 
 type DefinitionButtonProps = {
   word: string;
+  game: string;
   font: string;
   compact?: boolean;
 };
 
 export default function DefinitionButton({
   word,
+  game,
   font,
   compact = false,
 }: DefinitionButtonProps) {
@@ -24,7 +26,11 @@ export default function DefinitionButton({
         Definition
       </button>
       {showModal && (
-        <WordDefinitionModal word={word} onClose={() => setShowModal(false)} />
+        <WordDefinitionModal
+          word={word}
+          game={game}
+          onClose={() => setShowModal(false)}
+        />
       )}
     </>
   );

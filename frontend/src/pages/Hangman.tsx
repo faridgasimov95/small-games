@@ -4,7 +4,6 @@ import HangmanKeyboard from "@/games/hangman/hangmanKeyboard";
 import HangmanResultModal from "@/games/hangman/HangmanResultModal";
 import HangmanWord from "@/games/hangman/hangmanWord";
 import { useHangmanGame } from "@/games/hangman/useHangmanGame";
-import DefinitionButton from "@/games/wordle/DefinitionButton";
 
 export default function HangmanPage() {
   const {
@@ -55,6 +54,7 @@ export default function HangmanPage() {
         {params.mode === "endless" && endlessSolved && (
           <EndlessNextControls
             word={currentHiddenWord}
+            game={"hangman"}
             onNext={() => handleNext()}
           />
         )}

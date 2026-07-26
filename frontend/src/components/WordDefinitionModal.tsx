@@ -1,22 +1,24 @@
 import Modal from "@/components/Modal";
-import type { WordDefinition } from "@/types/wordle";
+import type { WordDefinition } from "@/types/shared";
 import { useEffect, useState } from "react";
-import { fetchDefinition } from "./dictionaryApi";
+import { fetchDefinition } from "../games/wordle/dictionaryApi";
 
 type WordDefinitionModalProps = {
   word: string;
+  game: string;
   onClose: () => void;
 };
 
 export default function WordDefinitionModal({
   word,
+  game,
   onClose,
 }: WordDefinitionModalProps) {
   const [definitions, setDefinitions] = useState<WordDefinition[] | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    const storageKey = `wordle-definition-${word}`;
+    const storageKey = `${game}-definition-${word}`;
     const cached = localStorage.getItem(storageKey);
 
     if (cached) {
@@ -33,7 +35,7 @@ export default function WordDefinitionModal({
         localStorage.setItem(storageKey, JSON.stringify(result));
       }
     });
-  }, [word]);
+  }, [word, game]);
 
   return (
     <Modal onClose={onClose}>

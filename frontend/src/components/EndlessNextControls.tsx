@@ -1,13 +1,15 @@
-import DefinitionButton from "@/games/wordle/DefinitionButton";
+import DefinitionButton from "@/components/DefinitionButton";
 
 type EndlessNextControlsProps = {
   word: string;
+  game: string;
   onNext: () => void;
   font?: string;
 };
 
 export default function EndlessNextControls({
   word,
+  game,
   onNext,
   font = "font-mono",
 }: EndlessNextControlsProps) {
@@ -16,11 +18,10 @@ export default function EndlessNextControls({
       <button
         className={`px-4 py-2 bg-accent text-bg ${font} transition-opacity cursor-pointer`}
         onClick={onNext}
-        style={{ transitionProperty: "opacity" }}
       >
         Next
       </button>
-      <DefinitionButton word={word} font={font} />
+      <DefinitionButton word={word} game={game} font={font} />
     </div>
   );
 }

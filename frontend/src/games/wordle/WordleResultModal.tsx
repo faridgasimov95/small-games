@@ -1,7 +1,7 @@
 import Modal from "@/components/Modal";
 import type { DailyStats, EndlessStats } from "@/types/wordle";
 import { useEffect, useState } from "react";
-import DefinitionButton from "./DefinitionButton";
+import DefinitionButton from "../../components/DefinitionButton";
 import DailyStatsView from "@/components/DailyStatsView";
 import EndlessStatsView from "@/components/EndlessStatsView";
 import { WORDLE_MAX_ATTEMPTS } from "./constants";
@@ -57,7 +57,12 @@ export default function WordleResultModal({
               {hiddenWord.toUpperCase()}
             </span>
           </p>
-          <DefinitionButton word={hiddenWord} font="font-mono" compact />
+          <DefinitionButton
+            word={hiddenWord}
+            game={"wordle"}
+            font="font-mono"
+            compact
+          />
         </div>
         {stats && mode === "daily" && "attempts" in stats && (
           <DailyStatsView

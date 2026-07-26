@@ -1,7 +1,7 @@
 import DailyStatsView from "@/components/DailyStatsView";
 import Modal from "@/components/Modal";
 import { useEffect, useState } from "react";
-import DefinitionButton from "../wordle/DefinitionButton";
+import DefinitionButton from "../../components/DefinitionButton";
 import { MAX_MISTAKES } from "./constants";
 import EndlessStatsView from "@/components/EndlessStatsView";
 import type { DailyStats, EndlessStats } from "@/types/hangman";
@@ -58,7 +58,12 @@ export default function HangmanResultModal({
               {hiddenWord.toUpperCase()}
             </span>
           </p>
-          <DefinitionButton word={hiddenWord} font="font-mono" compact />
+          <DefinitionButton
+            word={hiddenWord}
+            game={"hangman"}
+            font="font-mono"
+            compact
+          />
         </div>
         {stats && mode === "daily" && "mistakes" in stats && (
           <DailyStatsView
