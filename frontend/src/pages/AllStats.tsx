@@ -1,5 +1,5 @@
 import DailyStatsView from "@/components/DailyStatsView";
-import EndlessDistributionView from "@/games/wordle/EndlessDistributionView";
+import EndlessDistributionView from "@/components/EndlessDistributionView";
 import { type Difficulty, type GameName, type Mode } from "@/types/game";
 import type { EndlessResults } from "@/types/shared";
 import type { DailyStats as WordleDailyStats } from "@/types/wordle";

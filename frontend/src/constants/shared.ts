@@ -1,0 +1,1 @@
+export const ENDLESS_BUCKET_BOUNDARIES = [0, 5, 10, 20, 40, 80];

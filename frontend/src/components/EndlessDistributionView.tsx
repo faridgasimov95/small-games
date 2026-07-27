@@ -1,5 +1,5 @@
-import type { EndlessResults } from "@/types/wordle";
-import { ENDLESS_BUCKET_BOUNDARIES } from "./constants";
+import type { EndlessResults } from "@/types/shared";
+import { ENDLESS_BUCKET_BOUNDARIES } from "@/constants/shared";
 
 type EndlessDistributionViewProps = {
   resultCounts: EndlessResults;
