@@ -4,7 +4,7 @@ export default function NavBar() {
   return (
     <nav className="flex items-center justify-between px-4 py-3 bg-surface border-b border-divider">
       <NavLink to="/" className="font-pixel text-accent text-sm">
-        SMAL GAMES HUB
+        SMALL GAMES HUB
       </NavLink>
       <NavLink
         to="/stats"
