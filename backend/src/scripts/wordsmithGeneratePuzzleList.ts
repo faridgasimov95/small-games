@@ -1,3 +1,12 @@
+import { loadJson, writeData } from "../utils/wordUtils";
+
+const LETTER_COUNT = 7;
+const PUZZLES_PER_DIFFICULTY = 100;
+
+const MIN_WORDS_EASY = 8;
+const MIN_WORDS_MEDIUM = 12;
+const MIN_WORDS_HARD = 16;
+
 function letterCounts(word: string): Record<string, number> {
   const counts: Record<string, number> = {};
   for (const char of word) {
@@ -20,7 +29,7 @@ function isSubsetWord(
 }
 
 function generatePuzzle(
-  corpus: string[],
+  basis: string[],
   sevenLetterWords: string[],
   minWords: number,
 ): { letters: string[]; words: string[] } | null {
@@ -28,7 +37,7 @@ function generatePuzzle(
     sevenLetterWords[Math.floor(Math.random() * sevenLetterWords.length)];
   const sourceCounts = letterCounts(sourceWord);
 
-  const matches = corpus.filter(
+  const matches = basis.filter(
     (word) => word.length >= 3 && isSubsetWord(word, sourceCounts),
   );
 
@@ -38,7 +47,7 @@ function generatePuzzle(
 }
 
 function generatePuzzles(
-  corpus: string[],
+  basis: string[],
   sevenLetterWords: string[],
   minWords: number,
   count: number,
@@ -46,9 +55,49 @@ function generatePuzzles(
   const puzzles: { letters: string[]; words: string[] }[] = [];
 
   while (puzzles.length < count) {
-    const puzzle = generatePuzzle(corpus, sevenLetterWords, minWords);
+    const puzzle = generatePuzzle(basis, sevenLetterWords, minWords);
     if (puzzle) puzzles.push(puzzle);
   }
 
   return puzzles;
 }
+
+function run() {
+  const basis: string[] = loadJson("wordsmith", "basis.json");
+  const sevenLetterWords = basis.filter((word) => word.length === LETTER_COUNT);
+
+  console.log(`basis size: ${basis.length}`);
+  console.log(`7-letter source candidates: ${sevenLetterWords.length}`);
+
+  console.log("Generating easy puzzles...");
+  const easy = generatePuzzles(
+    basis,
+    sevenLetterWords,
+    MIN_WORDS_EASY,
+    PUZZLES_PER_DIFFICULTY,
+  );
+  writeData("../data/wordsmith/easy.json", easy);
+  console.log(`Done. Generated ${easy.length} easy puzzles.\n`);
+
+  console.log("Generating medium puzzles...");
+  const medium = generatePuzzles(
+    basis,
+    sevenLetterWords,
+    MIN_WORDS_MEDIUM,
+    PUZZLES_PER_DIFFICULTY,
+  );
+  writeData("../data/wordsmith/medium.json", medium);
+  console.log(`Done. Generated ${medium.length} medium puzzles.\n`);
+
+  console.log("Generating hard puzzles...");
+  const hard = generatePuzzles(
+    basis,
+    sevenLetterWords,
+    MIN_WORDS_HARD,
+    PUZZLES_PER_DIFFICULTY,
+  );
+  writeData("../data/wordsmith/hard.json", hard);
+  console.log(`Done. Generated ${hard.length} hard puzzles.\n`);
+}
+
+run();
