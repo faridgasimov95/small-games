@@ -13,14 +13,16 @@ async function fetchWordsForLength(length: number): Promise<string[]> {
   for (const letter of letters) {
     const pattern = letter + "?".repeat(length - 1);
     const data = await fetch(
-      `https://api.datamuse.com/words?sp=${pattern}&md=f&max=1000`,
+      `https://api.datamuse.com/words?sp=${pattern}&md=pf&max=1000`,
     );
     const response = await data.json();
 
     const words = response
       .map((obj: { word: string; tags: string[] }) => ({
         word: obj.word,
-        freq: parseFloat(obj.tags?.[0]?.replace("f:", "") ?? "0"),
+        freq: parseFloat(
+          obj.tags?.find((t) => t.startsWith("f:"))?.replace("f:", "") ?? "0",
+        ),
         isProper: obj.tags?.includes("prop"),
         isProper2: nlp(obj.word).has("#ProperNoun"),
         isPlural: nlp(obj.word).nouns().isPlural().found,
@@ -47,7 +49,7 @@ async function fetchWordsForLength(length: number): Promise<string[]> {
   return results;
 }
 
-async function generateCorpus() {
+async function generatebasis() {
   const allWords: string[] = [];
 
   for (let length = MIN_LENGTH; length <= MAX_LENGTH; length++) {
@@ -56,16 +58,16 @@ async function generateCorpus() {
     allWords.push(...words);
   }
 
-  const corpus = [...new Set(allWords)];
+  const basis = [...new Set(allWords)];
 
-  console.log(`Corpus: ${corpus.length} words`);
+  console.log(`Basis: ${basis.length} words`);
 
   fs.writeFileSync(
-    path.join(__dirname, "../data/wordsmith/corpus.json"),
-    JSON.stringify(corpus, null, 2),
+    path.join(__dirname, "../data/wordsmith/basis.json"),
+    JSON.stringify(basis, null, 2),
   );
 
   console.log("Done!");
 }
 
-generateCorpus();
+generatebasis();
