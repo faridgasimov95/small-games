@@ -3,9 +3,9 @@ import { loadJson, writeData } from "../utils/wordUtils";
 const LETTER_COUNT = 7;
 const PUZZLES_PER_DIFFICULTY = 100;
 
-const MIN_WORDS_EASY = 8;
-const MIN_WORDS_MEDIUM = 12;
-const MIN_WORDS_HARD = 16;
+const MIN_WORDS_EASY = 12;
+const MIN_WORDS_MEDIUM = 16;
+const MIN_WORDS_HARD = 20;
 
 function letterCounts(word: string): Record<string, number> {
   const counts: Record<string, number> = {};
