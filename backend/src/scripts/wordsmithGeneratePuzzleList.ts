@@ -1,11 +1,10 @@
 import { loadJson, writeData } from "../utils/wordUtils";
 
 const LETTER_COUNT = 7;
-const PUZZLES_PER_DIFFICULTY = 100;
+const PUZZLES_NUMBER = 200;
 
-const MIN_WORDS_EASY = 12;
-const MIN_WORDS_MEDIUM = 16;
-const MIN_WORDS_HARD = 20;
+const MIN_WORDS = 24;
+const MAX_WORDS = 35;
 
 function letterCounts(word: string): Record<string, number> {
   const counts: Record<string, number> = {};
@@ -32,6 +31,7 @@ function generatePuzzle(
   basis: string[],
   sevenLetterWords: string[],
   minWords: number,
+  maxWords: number,
 ): { letters: string[]; words: string[] } | null {
   const sourceWord =
     sevenLetterWords[Math.floor(Math.random() * sevenLetterWords.length)];
@@ -41,7 +41,7 @@ function generatePuzzle(
     (word) => word.length >= 3 && isSubsetWord(word, sourceCounts),
   );
 
-  if (matches.length < minWords) return null;
+  if (matches.length < minWords || matches.length > maxWords) return null;
 
   return { letters: sourceWord.split(""), words: matches };
 }
@@ -50,16 +50,28 @@ function generatePuzzles(
   basis: string[],
   sevenLetterWords: string[],
   minWords: number,
+  maxWords: number,
   count: number,
-): { letters: string[]; words: string[] }[] {
+): {
+  puzzles: { letters: string[]; words: string[] }[];
+  puzzleStats: Record<string, number>;
+} {
   const puzzles: { letters: string[]; words: string[] }[] = [];
+  let puzzleStats: Record<string, number> = {};
 
   while (puzzles.length < count) {
-    const puzzle = generatePuzzle(basis, sevenLetterWords, minWords);
+    const puzzle = generatePuzzle(basis, sevenLetterWords, minWords, maxWords);
     if (puzzle) puzzles.push(puzzle);
+    else continue;
+
+    if (puzzle.words) {
+      const key = puzzle.words.length;
+      const currentCount = puzzleStats[key] ?? 0;
+      puzzleStats = { ...puzzleStats, [key]: currentCount + 1 };
+    }
   }
 
-  return puzzles;
+  return { puzzles, puzzleStats };
 }
 
 function run() {
@@ -69,35 +81,20 @@ function run() {
   console.log(`basis size: ${basis.length}`);
   console.log(`7-letter source candidates: ${sevenLetterWords.length}`);
 
-  console.log("Generating easy puzzles...");
-  const easy = generatePuzzles(
+  console.log("Generating  puzzles...");
+  const { puzzles, puzzleStats } = generatePuzzles(
     basis,
     sevenLetterWords,
-    MIN_WORDS_EASY,
-    PUZZLES_PER_DIFFICULTY,
+    MIN_WORDS,
+    MAX_WORDS,
+    PUZZLES_NUMBER,
   );
-  writeData("../data/wordsmith/easy.json", easy);
-  console.log(`Done. Generated ${easy.length} easy puzzles.\n`);
+  writeData("../data/wordsmith/puzzles.json", puzzles);
+  console.log(`Done. Generated ${puzzles.length} puzzles.\n`);
 
-  console.log("Generating medium puzzles...");
-  const medium = generatePuzzles(
-    basis,
-    sevenLetterWords,
-    MIN_WORDS_MEDIUM,
-    PUZZLES_PER_DIFFICULTY,
-  );
-  writeData("../data/wordsmith/medium.json", medium);
-  console.log(`Done. Generated ${medium.length} medium puzzles.\n`);
-
-  console.log("Generating hard puzzles...");
-  const hard = generatePuzzles(
-    basis,
-    sevenLetterWords,
-    MIN_WORDS_HARD,
-    PUZZLES_PER_DIFFICULTY,
-  );
-  writeData("../data/wordsmith/hard.json", hard);
-  console.log(`Done. Generated ${hard.length} hard puzzles.\n`);
+  for (const [key, value] of Object.entries(puzzleStats)) {
+    console.log(`${key}: ${value} puzzles`);
+  }
 }
 
 run();
