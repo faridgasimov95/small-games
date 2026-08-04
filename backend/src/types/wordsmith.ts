@@ -1,8 +1,19 @@
-export type Difficulty = "easy" | "medium" | "hard";
+import type {
+  Difficulty,
+  Mode,
+  DailyWords,
+  EndlessResults,
+  EndlessStatsCalculated,
+  EndlessStats,
+} from "./shared";
 
-export type Puzzle = {
-  letters: string[];
-  words: string[];
+export type {
+  Difficulty,
+  Mode,
+  DailyWords,
+  EndlessResults,
+  EndlessStatsCalculated,
+  EndlessStats,
 };
 
 export type DailyGameResult = {
@@ -23,12 +34,6 @@ export type DailyStats = {
   total: number;
 };
 
-export type EndlessStats = {
-  totalStreak: number;
-  gamesPlayed: number;
-  maxStreak: number;
-};
-
 export type GlobalWordsmithStats = {
   daily: {
     [date: string]: {
@@ -42,4 +47,19 @@ export type GlobalWordsmithStats = {
     medium: EndlessStats;
     hard: EndlessStats;
   };
+};
+
+export type WordsmithPuzzle = {
+  letter: string[];
+  words: string[];
+};
+
+export type DailyWordsmith = {
+  date: string;
+  easy: WordsmithPuzzle | null;
+  medium: WordsmithPuzzle | null;
+  hard: WordsmithPuzzle | null;
+  easyHistory: WordsmithPuzzle[];
+  mediumHistory: WordsmithPuzzle[];
+  hardHistory: WordsmithPuzzle[];
 };
