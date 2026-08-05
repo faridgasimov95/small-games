@@ -7,6 +7,7 @@ import {
   loadJson as loadWords,
 } from "../utils/wordUtils";
 import { Difficulty, GlobalHangmanStats, Mode } from "../types/hangman";
+import { HANGMAN_STATS_PATH } from "../data/hangman/constants";
 
 const wordsEasy = loadWords<string>("hangman", "easy.json");
 const wordsMedium = loadWords<string>("hangman", "medium.json");
@@ -67,14 +68,18 @@ export const fetchStats = async (
   req: Request,
   res: Response,
 ): Promise<void> => {
+  const difficulty = req.query.difficulty as Difficulty;
+  const mode = req.query.mode as Mode;
+
+  if (mode !== "daily" && mode !== "endless") {
+    res.status(400).json({ error: "Given game-mode doesn't exist" });
+    return;
+  }
+
   try {
-    const difficulty = req.query.difficulty as Difficulty;
-    const mode = req.query.mode as Mode;
     const todayDate = new Date().toISOString().split("T")[0];
 
-    const globalStats = loadData<GlobalHangmanStats>(
-      "../data/hangman/hangmanStats.json",
-    );
+    const globalStats = loadData<GlobalHangmanStats>(HANGMAN_STATS_PATH);
 
     if (mode === "daily") {
       const todayStats = globalStats.daily[todayDate];
@@ -82,24 +87,15 @@ export const fetchStats = async (
         res.send({ mistakes: [0, 0, 0, 0, 0, 0, 0], solved: 0, total: 0 });
         return;
       }
-      const stats = todayStats[difficulty];
-      res.send(stats);
-    } else if (mode === "endless") {
+      res.send(todayStats[difficulty]);
+    } else {
       const streak = Number(req.query.streak);
       const resultCounts = globalStats.endless[difficulty].resultCounts;
-      const stats = calculateEndlessStats(resultCounts, streak);
-      res.send(stats);
+      res.send(calculateEndlessStats(resultCounts, streak));
     }
   } catch (err) {
-    if (
-      err instanceof Error &&
-      err.message.includes("game-mode doesn't exist")
-    ) {
-      res.status(400).json({ error: err.message });
-    } else {
-      console.log(err);
-      res.status(500).json({ error: "Internal server error" });
-    }
+    console.log(err);
+    res.status(500).json({ error: "Internal server error" });
   }
 };
 
