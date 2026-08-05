@@ -3,19 +3,17 @@ import {
   getPuzzleForMode,
   saveGlobalWordsmithStats as saveStats,
 } from "../services/wordsmithService";
-import {
-  getRandom as getPuzzle,
-  loadData as loadStats,
-  loadJson as loadPuzzles,
-  loadJson,
-} from "../utils/wordUtils";
+import { loadData as loadStats, loadJson } from "../utils/wordUtils";
 import {
   Difficulty,
   GlobalWordsmithStats,
   Mode,
   WordsmithPuzzle,
 } from "../types/wordsmith";
-import { DAILY_WORDSMITH_PATH } from "../data/wordsmith/constants";
+import {
+  DAILY_WORDSMITH_PATH,
+  WORDSMITH_STATS_PATH,
+} from "../data/wordsmith/constants";
 
 export const fetchPuzzle = async (
   req: Request,
@@ -49,9 +47,7 @@ export const updateStats = async (
 ): Promise<void> => {
   try {
     const singleStats = req.body;
-    const globalStats = loadStats<GlobalWordsmithStats>(
-      "../data/wordsmith/wordsmithStats.json",
-    );
+    const globalStats = loadStats<GlobalWordsmithStats>(WORDSMITH_STATS_PATH);
     saveStats(globalStats, singleStats);
     res.send({ message: "Stats were saved successfully" });
   } catch (e) {

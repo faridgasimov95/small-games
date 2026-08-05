@@ -50,7 +50,7 @@ export type GlobalWordsmithStats = {
 };
 
 export type WordsmithPuzzle = {
-  letter: string[];
+  letters: string[];
   words: string[];
 };
 
