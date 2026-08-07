@@ -3,7 +3,12 @@ import {
   getPuzzleForMode,
   saveGlobalWordsmithStats as saveStats,
 } from "../services/wordsmithService";
-import { loadData as loadStats, loadJson } from "../utils/wordUtils";
+import {
+  loadData as loadStats,
+  loadJson,
+  loadData,
+  calculateEndlessStats,
+} from "../utils/wordUtils";
 import {
   Difficulty,
   GlobalWordsmithStats,
@@ -63,9 +68,49 @@ export const updateStats = async (
 export const fetchStats = async (
   req: Request,
   res: Response,
-): Promise<void> => {};
+): Promise<void> => {
+  const difficulty = req.query.difficulty as Difficulty;
+  const mode = req.query.mode as Mode;
+
+  if (mode !== "daily" && mode !== "endless") {
+    res.status(400).json({ error: "Given game-mode doesn't exist" });
+    return;
+  }
+
+  try {
+    const todayDate = new Date().toISOString().split("T")[0];
+    const globalStats = loadData<GlobalWordsmithStats>(WORDSMITH_STATS_PATH);
+
+    if (mode === "daily") {
+      const todayStats = globalStats.daily[todayDate];
+      if (!todayStats) {
+        res.send({ attempts: [0, 0, 0, 0, 0, 0], solved: 0, total: 0 });
+        return;
+      }
+      res.send(todayStats[difficulty]);
+    } else {
+      const streak = Number(req.query.streak);
+      const resultCounts = globalStats.endless[difficulty].resultCounts;
+      res.send(calculateEndlessStats(resultCounts, streak));
+    }
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({ error: "Internal server error" });
+  }
+};
 
 export const fetchEndlessDistribution = async (
   req: Request,
   res: Response,
-): Promise<void> => {};
+): Promise<void> => {
+  try {
+    const difficulty = req.query.difficulty as Difficulty;
+    const globalStats = loadData<GlobalWordsmithStats>(WORDSMITH_STATS_PATH);
+    const { resultCounts } = globalStats.endless[difficulty];
+
+    res.send({ resultCounts });
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({ error: "Internal server error" });
+  }
+};
