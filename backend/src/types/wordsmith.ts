@@ -30,7 +30,7 @@ export type EndlessGameResult = {
 };
 
 export type DailyStats = {
-  top10Times: number[];
+  resultCounts: EndlessResults;
   total: number;
 };
 

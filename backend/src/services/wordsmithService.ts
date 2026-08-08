@@ -1,5 +1,3 @@
-import fs from "fs";
-import path from "path";
 import {
   DailyGameResult,
   DailyWordsmith,
@@ -7,18 +5,22 @@ import {
   GlobalWordsmithStats,
   WordsmithPuzzle,
 } from "../types/wordsmith";
-import {
-  getRandom,
-  loadData,
-  updateTopTen,
-  writeData,
-} from "../utils/wordUtils";
+import { getRandom, loadData, writeData } from "../utils/wordUtils";
 import { Difficulty, Mode } from "../types/shared";
 import {
   DAILY_HISTORY_LIMIT,
   ENDLESS_HISTORY_LIMIT,
   WORDSMITH_STATS_PATH,
 } from "../data/wordsmith/constants";
+
+const DAILY_TIME_BUCKETS = [30, 60, 120, 180] as const; // upper bounds; anything above last = overflow
+
+function bucketTime(seconds: number): string {
+  for (const bound of DAILY_TIME_BUCKETS) {
+    if (seconds < bound) return `<${bound}`;
+  }
+  return `>${DAILY_TIME_BUCKETS[DAILY_TIME_BUCKETS.length - 1]}`;
+}
 
 export const saveGlobalWordsmithStats = (
   globalStats: GlobalWordsmithStats,
@@ -32,10 +34,14 @@ export const saveGlobalWordsmithStats = (
     let newStats: GlobalWordsmithStats;
     if (gameStats.mode === "daily") {
       const existingDay = globalStats.daily[gameStats.date] ?? {
-        easy: { top10Times: [], total: 0 },
-        medium: { top10Times: [], total: 0 },
-        hard: { top10Times: [], total: 0 },
+        easy: { resultCounts: {}, total: 0 },
+        medium: { resultCounts: {}, total: 0 },
+        hard: { resultCounts: {}, total: 0 },
       };
+
+      const bucket = bucketTime(gameStats.time);
+      const existingCounts = existingDay[gameStats.difficulty].resultCounts;
+
       newStats = {
         ...globalStats,
         daily: {
@@ -43,10 +49,10 @@ export const saveGlobalWordsmithStats = (
           [gameStats.date]: {
             ...existingDay,
             [gameStats.difficulty]: {
-              top10Times: updateTopTen(
-                [...existingDay[gameStats.difficulty].top10Times],
-                gameStats.time,
-              ),
+              resultCounts: {
+                ...existingCounts,
+                [bucket]: (existingCounts[bucket] ?? 0) + 1,
+              },
               total: existingDay[gameStats.difficulty].total + 1,
             },
           },

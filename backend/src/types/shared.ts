@@ -12,7 +12,7 @@ export type DailyWords = {
 };
 
 export type EndlessResults = {
-  [result: number]: number;
+  [result: string]: number;
 };
 
 export type EndlessStatsCalculated = {

@@ -84,7 +84,7 @@ export const fetchStats = async (
     if (mode === "daily") {
       const todayStats = globalStats.daily[todayDate];
       if (!todayStats) {
-        res.send({ attempts: [0, 0, 0, 0, 0, 0], solved: 0, total: 0 });
+        res.send({ resultCounts: {}, total: 0 });
         return;
       }
       res.send(todayStats[difficulty]);
