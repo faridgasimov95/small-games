@@ -49,9 +49,7 @@ export const updateStats = async (
 ): Promise<void> => {
   try {
     const singleStats = req.body;
-    const globalStats = loadData<GlobalWordleStats>(
-      "../data/wordle/wordleStats.json",
-    );
+    const globalStats = loadData<GlobalWordleStats>(WORDLE_STATS_PATH);
     saveStats(globalStats, singleStats);
     res.send({ message: "Stats were saved successfully" });
   } catch (err) {
@@ -107,9 +105,7 @@ export const fetchEndlessDistribution = async (
 ): Promise<void> => {
   try {
     const difficulty = req.query.difficulty as Difficulty;
-    const globalStats = loadData<GlobalWordleStats>(
-      "../data/wordle/wordleStats.json",
-    );
+    const globalStats = loadData<GlobalWordleStats>(WORDLE_STATS_PATH);
     const { resultCounts } = globalStats.endless[difficulty];
 
     res.send({ resultCounts });

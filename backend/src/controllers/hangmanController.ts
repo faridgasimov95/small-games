@@ -49,9 +49,7 @@ export const updateStats = async (
 ): Promise<void> => {
   try {
     const singleStats = req.body;
-    const globalStats = loadData<GlobalHangmanStats>(
-      "../data/hangman/hangmanStats.json",
-    );
+    const globalStats = loadData<GlobalHangmanStats>(HANGMAN_STATS_PATH);
     saveStats(globalStats, singleStats);
     res.send({ message: "Stats were saved successfully" });
   } catch (e) {
@@ -105,9 +103,7 @@ export const fetchEndlessDistribution = async (
 ): Promise<void> => {
   try {
     const difficulty = req.query.difficulty as Difficulty;
-    const globalStats = loadData<GlobalHangmanStats>(
-      "../data/hangman/hangmanStats.json",
-    );
+    const globalStats = loadData<GlobalHangmanStats>(HANGMAN_STATS_PATH);
     const { resultCounts } = globalStats.endless[difficulty];
     res.send({ resultCounts });
   } catch (err) {

@@ -5,6 +5,7 @@ import {
   EndlessGameResult,
   GlobalWordleStats,
 } from "../types/wordle";
+import { WORDLE_STATS_PATH } from "../data/wordle/constants";
 
 export const saveGlobalWordleStats = (
   globalStats: GlobalWordleStats,
@@ -60,7 +61,7 @@ export const saveGlobalWordleStats = (
     }
 
     fs.writeFileSync(
-      path.join(__dirname, "../data/wordle/wordleStats.json"),
+      path.join(__dirname, WORDLE_STATS_PATH),
       JSON.stringify(newStats, null, 2),
       "utf-8",
     );

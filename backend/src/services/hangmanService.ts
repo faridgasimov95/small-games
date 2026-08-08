@@ -5,6 +5,7 @@ import {
   EndlessGameResult,
   GlobalHangmanStats,
 } from "../types/hangman";
+import { HANGMAN_STATS_PATH } from "../data/hangman/constants";
 
 export const saveGlobalHangmanStats = (
   globalStats: GlobalHangmanStats,
@@ -58,7 +59,7 @@ export const saveGlobalHangmanStats = (
     }
 
     fs.writeFileSync(
-      path.join(__dirname, "../data/hangman/hangmanStats.json"),
+      path.join(__dirname, HANGMAN_STATS_PATH),
       JSON.stringify(newStats, null, 2),
       "utf-8",
     );

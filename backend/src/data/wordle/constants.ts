@@ -1,1 +1,1 @@
-export const WORDLE_STATS_PATH = "../data/wordsmith/wordsmithStats.json";
+export const WORDLE_STATS_PATH = "../data/wordle/wordleStats.json";
