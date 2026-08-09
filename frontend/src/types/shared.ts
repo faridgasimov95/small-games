@@ -10,5 +10,5 @@ export type WordDefinition = {
 };
 
 export type EndlessResults = {
-  [result: number]: number;
+  [result: string]: number;
 };
