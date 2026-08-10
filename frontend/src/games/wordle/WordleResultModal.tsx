@@ -67,8 +67,8 @@ export default function WordleResultModal({
         {stats && mode === "daily" && "attempts" in stats && (
           <DailyStatsView
             distribution={stats.attempts}
-            maxRounds={WORDLE_MAX_ATTEMPTS}
-            highlightRound={attempts}
+            barCount={WORDLE_MAX_ATTEMPTS}
+            highlightedBar={attempts}
           />
         )}
 

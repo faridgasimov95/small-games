@@ -68,8 +68,8 @@ export default function HangmanResultModal({
         {stats && mode === "daily" && "mistakes" in stats && (
           <DailyStatsView
             distribution={stats.mistakes}
-            maxRounds={MAX_MISTAKES}
-            highlightRound={mistakes}
+            barCount={MAX_MISTAKES}
+            highlightBar={mistakes}
           />
         )}
 
