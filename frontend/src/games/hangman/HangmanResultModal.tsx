@@ -4,13 +4,18 @@ import { useEffect, useState } from "react";
 import DefinitionButton from "../../components/DefinitionButton";
 import { MAX_MISTAKES } from "./constants";
 import EndlessStatsView from "@/components/EndlessStatsView";
-import type { DailyStats, EndlessStats } from "@/types/hangman";
+import type {
+  DailyStats,
+  Difficulty,
+  EndlessStats,
+  Mode,
+} from "@/types/hangman";
 
 const API_URL = import.meta.env.VITE_API_URL;
 
 type HangmanResultModalProps = {
-  mode: string;
-  difficulty: string;
+  mode: Mode;
+  difficulty: Difficulty;
   solved: boolean;
   hiddenWord: string;
   mistakes?: number;

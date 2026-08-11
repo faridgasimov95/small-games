@@ -1,5 +1,10 @@
 import Modal from "@/components/Modal";
-import type { DailyStats, EndlessStats } from "@/types/wordle";
+import type {
+  DailyStats,
+  Difficulty,
+  EndlessStats,
+  Mode,
+} from "@/types/wordle";
 import { useEffect, useState } from "react";
 import DefinitionButton from "../../components/DefinitionButton";
 import DailyStatsView from "@/components/DailyStatsView";
@@ -8,8 +13,8 @@ import { WORDLE_MAX_ATTEMPTS } from "./constants";
 const API_URL = import.meta.env.VITE_API_URL;
 
 type WordleResultModalProps = {
-  mode: string;
-  difficulty: string;
+  mode: Mode;
+  difficulty: Difficulty;
   solved: boolean;
   hiddenWord: string;
   attempts?: number;
