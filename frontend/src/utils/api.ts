@@ -1,3 +1,5 @@
+import type { WordsmithPuzzle } from "@/types/wordsmith";
+
 type WordFetchBody = { words: string[] };
 
 type WordleDailyStatsBody = {
@@ -22,7 +24,13 @@ type EndlessStatsBody = {
   streak: number;
 };
 
-type PostBody = WordFetchBody | DailyStatsBody | EndlessStatsBody;
+type WordsmithFetchBody = { usedPuzzles: WordsmithPuzzle[] };
+
+type PostBody =
+  | WordFetchBody
+  | DailyStatsBody
+  | EndlessStatsBody
+  | WordsmithFetchBody;
 
 export async function postData(url: string, data?: PostBody) {
   const response = await fetch(url, {
