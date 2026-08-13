@@ -9,6 +9,7 @@ type WordleDailyStatsBody = {
   date: string;
   attempts?: number;
 };
+
 type HangmanDailyStatsBody = {
   mode: "daily";
   difficulty: string;
@@ -16,7 +17,19 @@ type HangmanDailyStatsBody = {
   date: string;
   mistakes: number;
 };
-type DailyStatsBody = WordleDailyStatsBody | HangmanDailyStatsBody;
+
+type WordsmithDailyStatsBody = {
+  mode: "daily";
+  difficulty: string;
+  solved: boolean;
+  date: string;
+  time: number;
+};
+
+type DailyStatsBody =
+  | WordleDailyStatsBody
+  | HangmanDailyStatsBody
+  | WordsmithDailyStatsBody;
 
 type EndlessStatsBody = {
   mode: "endless";

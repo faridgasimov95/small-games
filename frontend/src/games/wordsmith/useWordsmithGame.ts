@@ -55,7 +55,7 @@ export async function wordsmithLoader({
   return { puzzle, foundWords: [] };
 }
 
-export function useHangmanGame() {
+export function useWordsmithGame() {
   const params = useParams();
   const difficulty = params.difficulty as Difficulty;
 
@@ -73,6 +73,7 @@ export function useHangmanGame() {
   const [timeLeft, setTimeLeft] = useState(TIME_LIMIT_SECONDS);
   const [completionTime, setCompletionTime] = useState<number | null>(null);
   const [round, setRound] = useState((currentStreak ?? 0) + 1);
+  const [statsSaved, setStatsSaved] = useState(false);
 
   const target = WORD_TARGETS[difficulty];
   const isSolved = currentFoundWords.length >= target;
@@ -88,13 +89,99 @@ export function useHangmanGame() {
   }, [readOnly]);
 
   useEffect(() => {
-    if (!readOnly) return;
-    if (isSolved && completionTime === null) {
-      setCompletionTime(TIME_LIMIT_SECONDS - timeLeft);
-    }
+    if (params.mode !== "daily" || readOnly) return;
+    const today = new Date().toISOString().split("T")[0];
+    const storageKey = `wordsmith-daily-${difficulty}-${today}`;
+    localStorage.setItem(
+      storageKey,
+      JSON.stringify({ foundWords: currentFoundWords, puzzle: currentPuzzle }),
+    );
+  }, [currentFoundWords]);
 
-    // TODO: mirror hangman's daily/endless stats-saving + localStorage
-    // cleanup + setShowModal(true) after a short delay
+  useEffect(() => {
+    if (!readOnly || statsSaved) return;
+    setStatsSaved(true);
+
+    const finalTime = isSolved
+      ? TIME_LIMIT_SECONDS - timeLeft
+      : TIME_LIMIT_SECONDS;
+    setCompletionTime(finalTime);
+
+    if (params.mode === "daily") {
+      const today = new Date().toISOString().split("T")[0];
+      const storageKey = `wordsmith-daily-${difficulty}-${today}`;
+      localStorage.setItem(
+        storageKey,
+        JSON.stringify({
+          foundWords: currentFoundWords,
+          puzzle: currentPuzzle,
+        }),
+      );
+
+      setTimeout(() => setShowModal(true), 1000);
+
+      (async () => {
+        try {
+          const response = await postData(`${API_URL}/wordsmith/stats`, {
+            mode: "daily",
+            difficulty,
+            solved: isSolved,
+            date: today,
+            time: finalTime,
+          });
+          if (!response.ok) {
+            console.error("Failed to save stats:", await response.json());
+          }
+        } catch (err) {
+          console.error("Failed to save stats:", err);
+        }
+      })();
+    } else if (params.mode === "endless") {
+      const storageKey = `wordsmith-endless-${difficulty}`;
+
+      if (isSolved) {
+        const newUsedPuzzles = [...currentUsedPuzzles, currentPuzzle].slice(
+          -ENDLESS_HISTORY_LIMIT,
+        );
+        setCurrentUsedPuzzles(newUsedPuzzles);
+
+        setStreak((prev) => {
+          const newStreak = prev + 1;
+          localStorage.setItem(
+            storageKey,
+            JSON.stringify({
+              foundWords: currentFoundWords,
+              puzzle: currentPuzzle,
+              streak: newStreak,
+              usedPuzzles: newUsedPuzzles,
+            }),
+          );
+          return newStreak;
+        });
+
+        setTimeout(() => {
+          setEndlessSolved(true);
+        }, 1000);
+      } else {
+        setTimeout(() => setShowModal(true), 1000);
+        (async () => {
+          try {
+            const response = await postData(`${API_URL}/wordsmith/stats`, {
+              mode: "endless",
+              difficulty,
+              streak,
+            });
+            if (!response.ok) {
+              console.error("Failed to save stats:", await response.json());
+            } else {
+              localStorage.removeItem(storageKey);
+            }
+          } catch (err) {
+            console.error("Failed to save stats:", err);
+          }
+        })();
+      }
+    }
   }, [readOnly]);
 
   function handleWordGuess(word: string) {
@@ -105,7 +192,31 @@ export function useHangmanGame() {
     setCurrentFoundWords((prev) => [...prev, word]);
   }
 
-  // TODO: handleNext and handlePlayAgain
+  async function handleNext(
+    usedWordsOverride?: WordsmithPuzzle[],
+    nextRound?: number,
+  ) {
+    const puzzlesToExclude = usedWordsOverride ?? currentUsedPuzzles;
+    setEndlessSolved(false);
+    const response = await postData(
+      `${API_URL}/wordsmith/word?difficulty=${params.difficulty?.toLowerCase()}&mode=${params.mode?.toLowerCase()}`,
+      { usedPuzzles: puzzlesToExclude },
+    );
+    const newPuzzle = await response.json();
+    setCurrentPuzzle(newPuzzle);
+    setCurrentFoundWords([]);
+    setTimeLeft(TIME_LIMIT_SECONDS);
+    setCompletionTime(null);
+    setStatsSaved(false);
+    setRound(nextRound ?? round + 1);
+  }
+
+  function handlePlayAgain() {
+    setStreak(0);
+    setCurrentUsedPuzzles([]);
+    setShowModal(false);
+    handleNext([], 1);
+  }
 
   return {
     params,
@@ -122,6 +233,8 @@ export function useHangmanGame() {
     round,
     completionTime,
     handleWordGuess,
+    handleNext,
+    handlePlayAgain,
     setShowModal,
   };
 }

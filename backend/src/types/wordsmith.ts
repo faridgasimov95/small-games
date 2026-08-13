@@ -19,6 +19,7 @@ export type {
 export type DailyGameResult = {
   mode: "daily";
   difficulty: Difficulty;
+  solved: boolean;
   time: number;
   date: string;
 };
