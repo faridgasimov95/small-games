@@ -11,4 +11,5 @@ export type WordsmithPuzzle = {
 export type DailyStats = {
   resultCounts: EndlessResults;
   total: number;
+  failed: number;
 };

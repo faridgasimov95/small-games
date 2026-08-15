@@ -34,13 +34,28 @@ export const saveGlobalWordsmithStats = (
     let newStats: GlobalWordsmithStats;
     if (gameStats.mode === "daily") {
       const existingDay = globalStats.daily[gameStats.date] ?? {
-        easy: { resultCounts: {}, total: 0 },
-        medium: { resultCounts: {}, total: 0 },
-        hard: { resultCounts: {}, total: 0 },
+        easy: { resultCounts: {}, total: 0, failed: 0 },
+        medium: { resultCounts: {}, total: 0, failed: 0 },
+        hard: { resultCounts: {}, total: 0, failed: 0 },
       };
 
       const bucket = bucketTime(gameStats.time);
-      const existingCounts = existingDay[gameStats.difficulty].resultCounts;
+      const existingStats = existingDay[gameStats.difficulty];
+
+      const updatedStats = gameStats.solved
+        ? {
+            ...existingStats,
+            resultCounts: {
+              ...existingStats.resultCounts,
+              [bucket]: (existingStats.resultCounts[bucket] ?? 0) + 1,
+            },
+            total: existingStats.total + 1,
+          }
+        : {
+            ...existingStats,
+            total: existingStats.total + 1,
+            failed: existingStats.failed + 1,
+          };
 
       newStats = {
         ...globalStats,
@@ -49,11 +64,7 @@ export const saveGlobalWordsmithStats = (
           [gameStats.date]: {
             ...existingDay,
             [gameStats.difficulty]: {
-              resultCounts: {
-                ...existingCounts,
-                [bucket]: (existingCounts[bucket] ?? 0) + 1,
-              },
-              total: existingDay[gameStats.difficulty].total + 1,
+              ...updatedStats,
             },
           },
         },

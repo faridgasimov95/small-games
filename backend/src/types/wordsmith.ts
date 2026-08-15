@@ -33,6 +33,7 @@ export type EndlessGameResult = {
 export type DailyStats = {
   resultCounts: EndlessResults;
   total: number;
+  failed: number;
 };
 
 export type GlobalWordsmithStats = {
