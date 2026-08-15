@@ -47,7 +47,7 @@ export async function wordsmithLoader({
   }
 
   const response = await postData(
-    `${API_URL}/wordsmith/word?difficulty=${params.difficulty?.toLowerCase()}&mode=${params.mode?.toLowerCase()}`,
+    `${API_URL}/wordsmith/puzzle?difficulty=${params.difficulty?.toLowerCase()}&mode=${params.mode?.toLowerCase()}`,
     params.mode === "endless" ? { usedPuzzles: [] } : undefined,
   );
 
@@ -199,7 +199,7 @@ export function useWordsmithGame() {
     const puzzlesToExclude = usedWordsOverride ?? currentUsedPuzzles;
     setEndlessSolved(false);
     const response = await postData(
-      `${API_URL}/wordsmith/word?difficulty=${params.difficulty?.toLowerCase()}&mode=${params.mode?.toLowerCase()}`,
+      `${API_URL}/wordsmith/puzzle?difficulty=${params.difficulty?.toLowerCase()}&mode=${params.mode?.toLowerCase()}`,
       { usedPuzzles: puzzlesToExclude },
     );
     const newPuzzle = await response.json();
