@@ -13,9 +13,9 @@ export default function WordsmithLettersBoard({
   return (
     <div className="relative" style={{ width: center * 2, height: center * 2 }}>
       {letters.map((letter, i) => {
-        const angle = (i / letters.length) * 2 * Math.PI - Math.PI / 2;
-        const x = center + radius * Math.cos(angle) - 24;
-        const y = center + radius * Math.sin(angle) - 24;
+        const angle = (i / letters.length) * 2 * Math.PI;
+        const x = radius * (Math.cos(angle) + 1);
+        const y = radius * (Math.sin(angle) + 1);
 
         return (
           <div key={i} className="absolute" style={{ left: x, top: y }}>
