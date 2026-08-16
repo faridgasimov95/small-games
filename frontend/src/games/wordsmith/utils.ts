@@ -1,10 +1,13 @@
-import type { EndlessResults } from "@/types/wordsmith";
+import type { DailyStats } from "@/types/wordsmith";
 import { DAILY_BUCKET_LABELS, DAILY_TIME_BOUNDS } from "./constants";
 
-export function toDailyDistribution(resultCounts: EndlessResults) {
+export function toDailyDistribution(stats: DailyStats) {
   return {
-    distribution: DAILY_BUCKET_LABELS.map((label) => resultCounts[label] ?? 0),
-    labels: DAILY_BUCKET_LABELS,
+    distribution: [
+      ...DAILY_BUCKET_LABELS.map((label) => stats.resultCounts[label] ?? 0),
+      stats.failed,
+    ],
+    labels: [...DAILY_BUCKET_LABELS, "Failed"],
   };
 }
 

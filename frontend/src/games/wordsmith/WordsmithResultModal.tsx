@@ -14,21 +14,25 @@ const API_URL = import.meta.env.VITE_API_URL;
 type WorsmithResultModalProps = {
   mode: Mode;
   difficulty: Difficulty;
-  dailyStats?: DailyStats;
-  endlessStats?: EndlessStats;
+  solved: boolean;
+  foundWordsCount: number;
+  target: number;
   streak?: number;
   completionTime: number;
   onClose: () => void;
+  onPlayAgain: () => void;
 };
 
 export default function WordsmithResultModal({
   mode,
   difficulty,
-  dailyStats,
-  endlessStats,
+  solved,
+  foundWordsCount,
+  target,
   streak,
   completionTime,
   onClose,
+  onPlayAgain,
 }: WorsmithResultModalProps) {
   const [stats, setStats] = useState<DailyStats | EndlessStats | null>(null);
 
@@ -48,18 +52,43 @@ export default function WordsmithResultModal({
 
   return (
     <Modal onClose={onClose}>
-      <div>
+      <div className="flex flex-col gap-4 items-center text-center">
+        <h2 className="font-pixel text-accent text-lg">
+          {solved ? "You won!" : "You lost"}
+        </h2>
+        <p className="font-mono text-text/70">
+          You found{" "}
+          <span className="text-accent font-bold">
+            {foundWordsCount}/{target}
+          </span>
+        </p>
+
         {stats && mode === "daily" && "resultCounts" in stats && (
           <DailyStatsView
-            {...toDailyDistribution(stats.resultCounts)}
-            barCount={5}
-            highlightedBar={getBucketIndex(completionTime)}
+            {...toDailyDistribution(stats)}
+            barCount={6}
+            highlightedBar={solved ? getBucketIndex(completionTime) : 6}
           />
         )}
         {stats && mode === "endless" && "percentile" in stats && (
           <EndlessStatsView stats={stats} currentStreak={streak ?? 0} />
         )}
-        <button onClick={onClose}>Close</button>
+        <div className="flex gap-2">
+          <button
+            onClick={onClose}
+            className="px-4 py-2 bg-accent text-bg font-mono text-sm cursor-pointer"
+          >
+            Close
+          </button>
+          {mode === "endless" && !solved && (
+            <button
+              onClick={onPlayAgain}
+              className="px-4 py-2 bg-accent text-bg font-mono text-sm cursor-pointer"
+            >
+              Play Again
+            </button>
+          )}
+        </div>
       </div>
     </Modal>
   );
