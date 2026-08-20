@@ -225,7 +225,6 @@ export function useWordsmithGame() {
     target,
     timeLeft,
     isSolved,
-    isTimeUp,
     readOnly,
     endlessSolved,
     showModal,

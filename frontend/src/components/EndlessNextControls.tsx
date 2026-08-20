@@ -1,7 +1,7 @@
 import DefinitionButton from "@/components/DefinitionButton";
 
 type EndlessNextControlsProps = {
-  word: string;
+  word?: string;
   game: string;
   onNext: () => void;
   font?: string;
@@ -21,7 +21,7 @@ export default function EndlessNextControls({
       >
         Next
       </button>
-      <DefinitionButton word={word} game={game} font={font} />
+      {word && <DefinitionButton word={word} game={game} font={font} />}
     </div>
   );
 }
