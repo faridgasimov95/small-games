@@ -116,7 +116,7 @@ export default function AllStatsPage() {
                   ? (dailyStats as HangmanDailyStats).mistakes
                   : (dailyStats as WordleDailyStats).attempts
               }
-              maxRounds={
+              barCount={
                 gameName === "hangman" ? MAX_MISTAKES : WORDLE_MAX_ATTEMPTS
               }
             />
