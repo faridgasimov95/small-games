@@ -2,6 +2,7 @@ import EndlessNextControls from "@/components/EndlessNextControls";
 import { useWordleGame } from "@/games/wordle/useWordleGame";
 import WordleBoard from "@/games/wordle/WordleBoard";
 import WordleResultModal from "@/games/wordle/WordleResultModal";
+import type { Difficulty, Mode } from "@/types/game";
 
 export default function WordlePage() {
   const {
@@ -55,8 +56,8 @@ export default function WordlePage() {
       </div>
       {showModal && (
         <WordleResultModal
-          mode={params.mode!}
-          difficulty={params.difficulty!}
+          mode={params.mode! as Mode}
+          difficulty={params.difficulty! as Difficulty}
           solved={isSolved}
           hiddenWord={currentHiddenWord}
           attempts={currentGuesses.length}

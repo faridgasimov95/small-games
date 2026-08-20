@@ -4,6 +4,7 @@ import HangmanKeyboard from "@/games/hangman/hangmanKeyboard";
 import HangmanResultModal from "@/games/hangman/HangmanResultModal";
 import HangmanWord from "@/games/hangman/hangmanWord";
 import { useHangmanGame } from "@/games/hangman/useHangmanGame";
+import type { Difficulty, Mode } from "@/types/game";
 
 export default function HangmanPage() {
   const {
@@ -61,8 +62,8 @@ export default function HangmanPage() {
       </div>
       {showModal && (
         <HangmanResultModal
-          mode={params.mode!}
-          difficulty={params.difficulty!}
+          mode={params.mode! as Mode}
+          difficulty={params.difficulty! as Difficulty}
           solved={isSolved}
           hiddenWord={currentHiddenWord}
           mistakes={mistakes}
