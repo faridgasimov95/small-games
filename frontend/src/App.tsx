@@ -7,9 +7,9 @@ import { clearStaleDailyCache, clearDefinitionCache } from "./utils/storage";
 import Layout from "./components/Layout";
 import AllStatsPage from "./pages/AllStats";
 import ErrorPage from "./pages/Error";
-import ComingSoonPage from "./pages/ComingSoon";
 import HangmanPage from "./pages/Hangman";
 import { hangmanLoader } from "./games/hangman/useHangmanGame";
+import WordsmithPage from "./pages/Wordsmith";
 
 const router = createBrowserRouter([
   {
@@ -32,7 +32,7 @@ const router = createBrowserRouter([
       },
       {
         path: "wordsmith/:difficulty/:mode",
-        element: <ComingSoonPage gameName="wordsmith" />,
+        element: <WordsmithPage />,
       },
       { path: "*", element: <ErrorPage /> },
     ],
