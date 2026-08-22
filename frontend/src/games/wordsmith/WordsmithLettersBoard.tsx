@@ -7,7 +7,7 @@ type WordsmithLettersBoardProps = {
 export default function WordsmithLettersBoard({
   letters,
 }: WordsmithLettersBoardProps) {
-  const radius = 70;
+  const radius = 80;
   const center = radius + 24;
 
   return (

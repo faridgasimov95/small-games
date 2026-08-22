@@ -4,20 +4,23 @@ import { type Difficulty, type GameName, type Mode } from "@/types/game";
 import type { EndlessResults } from "@/types/shared";
 import type { DailyStats as WordleDailyStats } from "@/types/wordle";
 import type { DailyStats as HangmanDailyStats } from "@/types/hangman";
+import type { DailyStats as WordsmithDailyStats } from "@/types/wordsmith";
 import { useEffect, useState } from "react";
 import games from "@/games/gamesList";
 import { WORDLE_MAX_ATTEMPTS } from "@/games/wordle/constants";
 import { MAX_MISTAKES } from "@/games/hangman/constants";
+import { toDailyDistribution } from "@/games/wordsmith/utils";
+import { DAILY_BUCKET_LABELS } from "@/games/wordsmith/constants";
 
 const API_URL = import.meta.env.VITE_API_URL;
-const STATS_SUPPORTED_GAMES: GameName[] = ["wordle", "hangman"];
+const STATS_SUPPORTED_GAMES: GameName[] = ["wordle", "hangman", "wordsmith"];
 
 export default function AllStatsPage() {
   const [gameName, setGameName] = useState<GameName>("wordle");
   const [difficulty, setDifficulty] = useState<Difficulty>("easy");
   const [mode, setMode] = useState<Mode>("daily");
   const [dailyStats, setDailyStats] = useState<
-    WordleDailyStats | HangmanDailyStats | null
+    WordleDailyStats | HangmanDailyStats | WordsmithDailyStats | null
   >(null);
   const [resultCounts, setResultCounts] = useState<EndlessResults | null>(null);
 
@@ -109,18 +112,25 @@ export default function AllStatsPage() {
             ))}
           </div>
 
-          {mode === "daily" && dailyStats && (
-            <DailyStatsView
-              distribution={
-                gameName === "hangman"
-                  ? (dailyStats as HangmanDailyStats).mistakes
-                  : (dailyStats as WordleDailyStats).attempts
-              }
-              barCount={
-                gameName === "hangman" ? MAX_MISTAKES : WORDLE_MAX_ATTEMPTS
-              }
-            />
-          )}
+          {mode === "daily" &&
+            dailyStats &&
+            (gameName === "wordsmith" ? (
+              <DailyStatsView
+                {...toDailyDistribution(dailyStats as WordsmithDailyStats)}
+                barCount={DAILY_BUCKET_LABELS.length + 1}
+              />
+            ) : (
+              <DailyStatsView
+                distribution={
+                  gameName === "hangman"
+                    ? (dailyStats as HangmanDailyStats).mistakes
+                    : (dailyStats as WordleDailyStats).attempts
+                }
+                barCount={
+                  gameName === "hangman" ? MAX_MISTAKES : WORDLE_MAX_ATTEMPTS
+                }
+              />
+            ))}
           {mode === "endless" && resultCounts && (
             <EndlessDistributionView resultCounts={resultCounts} />
           )}
