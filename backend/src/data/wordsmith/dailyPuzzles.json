@@ -1,0 +1,91 @@
+{
+  "date": "2026-08-22",
+  "easy": {
+    "letters": [
+      "r",
+      "e",
+      "s",
+      "t",
+      "i",
+      "n",
+      "g"
+    ],
+    "words": [
+      "gin",
+      "ire",
+      "its",
+      "rig",
+      "ser",
+      "sin",
+      "ten",
+      "tin",
+      "gist",
+      "grin",
+      "grit",
+      "nest",
+      "rite",
+      "sine",
+      "sire",
+      "site",
+      "tier",
+      "inert",
+      "inset",
+      "inter",
+      "reins",
+      "resin",
+      "rinse",
+      "siren",
+      "stern",
+      "tiger",
+      "tinge",
+      "resting"
+    ]
+  },
+  "medium": null,
+  "hard": null,
+  "easyHistory": [
+    {
+      "letters": [
+        "r",
+        "e",
+        "s",
+        "t",
+        "i",
+        "n",
+        "g"
+      ],
+      "words": [
+        "gin",
+        "ire",
+        "its",
+        "rig",
+        "ser",
+        "sin",
+        "ten",
+        "tin",
+        "gist",
+        "grin",
+        "grit",
+        "nest",
+        "rite",
+        "sine",
+        "sire",
+        "site",
+        "tier",
+        "inert",
+        "inset",
+        "inter",
+        "reins",
+        "resin",
+        "rinse",
+        "siren",
+        "stern",
+        "tiger",
+        "tinge",
+        "resting"
+      ]
+    }
+  ],
+  "mediumHistory": [],
+  "hardHistory": []
+}

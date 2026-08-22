@@ -17,7 +17,7 @@ export default function DailyStatsView({
     <div className="w-64">
       {Array.from({ length: barCount }, (_, i) => i).map((round) => (
         <div key={round} className="flex flex-row gap-1">
-          <span>{labels?.[round] ?? round + 1}</span>
+          <span className="w-16 shrink-0">{labels?.[round] ?? round + 1}</span>
           <span
             className={`h-5 flex justify-end items-center px-1 min-w-4 ${round + 1 === highlightedBar ? "bg-accent" : "bg-surface-card"}`}
             style={{

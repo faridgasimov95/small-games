@@ -10,6 +10,7 @@ import ErrorPage from "./pages/Error";
 import HangmanPage from "./pages/Hangman";
 import { hangmanLoader } from "./games/hangman/useHangmanGame";
 import WordsmithPage from "./pages/Wordsmith";
+import { wordsmithLoader } from "./games/wordsmith/useWordsmithGame";
 
 const router = createBrowserRouter([
   {
@@ -33,6 +34,7 @@ const router = createBrowserRouter([
       {
         path: "wordsmith/:difficulty/:mode",
         element: <WordsmithPage />,
+        loader: wordsmithLoader,
       },
       { path: "*", element: <ErrorPage /> },
     ],

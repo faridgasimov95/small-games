@@ -16,8 +16,11 @@ import {
 const DAILY_TIME_BUCKETS = [30, 60, 120, 180] as const; // upper bounds; anything above last = overflow
 
 function bucketTime(seconds: number): string {
-  for (const bound of DAILY_TIME_BUCKETS) {
-    if (seconds < bound) return `<${bound}`;
+  for (let i = 0; i < DAILY_TIME_BUCKETS.length; i++) {
+    if (seconds < DAILY_TIME_BUCKETS[i])
+      return i === 0
+        ? `<${DAILY_TIME_BUCKETS[i]}`
+        : `${DAILY_TIME_BUCKETS[i - 1]}-${DAILY_TIME_BUCKETS[i]}`;
   }
   return `>${DAILY_TIME_BUCKETS[DAILY_TIME_BUCKETS.length - 1]}`;
 }
