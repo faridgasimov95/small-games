@@ -12,9 +12,9 @@ function filterInflections(words: string[]): string[] {
     const isPluralNoun = doc.nouns().isPlural().found;
     const isPastTense = doc.has("#PastTense");
     const isGerund = doc.has("#Gerund");
-    const is3rdPersonVerb = doc.verbs().isSingular().found;
+    // const is3rdPersonVerb = doc.verbs().isSingular().found;
 
-    return !isPluralNoun && !isPastTense && !isGerund && !is3rdPersonVerb;
+    return !isPluralNoun && !isPastTense && !isGerund; // && !is3rdPersonVerb;
   });
 }
 
@@ -91,6 +91,17 @@ async function run() {
   // console.log("Filtering inflected forms...");
   // const afterInflectionFilter = filterInflections(words);
   // console.log(`Kept ${afterInflectionFilter.length} after inflection filter.`);
+  // writeData("../data/wordsmith/basis.json", afterInflectionFilter);
+
+  // console.log("Filtering digits/punctuation...");
+  // const filtered = filterDigitsPunctuation(words);
+  // console.log(`Kept ${filtered.length} after removing digits/punctuation.`);
+  // writeData("../data/wordsmith/basis.json", filtered);
+
+  // const englishWordSet = new Set(englishWords);
+  // const filtered = words.filter((word) => englishWordSet.has(word));
+  // console.log(`Starting: ${words.length}, kept: ${filtered.length}`);
+  // writeData("../data/wordsmith/basis.json", filtered);
 
   console.log("Filtering against dictionary API...");
   const { passed, failed } = await filterAgainstDictionary(words);
@@ -98,14 +109,6 @@ async function run() {
   writeData("../data/wordsmith/basis.json", passed);
   writeData("../data/wordsmith/failedWords.json", failed);
 
-  // const filtered = filterDigitsPunctuation(words);
-  // console.log(`Kept ${filtered.length} after removing digits/punctuation.`);
-
-  // const englishWordSet = new Set(englishWords);
-  // const filtered = words.filter((word) => englishWordSet.has(word));
-  // console.log(`Starting: ${words.length}, kept: ${filtered.length}`);
-
-  // writeData("../data/wordsmith/basis.json", filtered);
   console.log("Done!");
 }
 
