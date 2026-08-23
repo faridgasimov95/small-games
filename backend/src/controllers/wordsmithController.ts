@@ -39,7 +39,9 @@ export const fetchPuzzle = async (
       data?.usedPuzzles,
     );
 
-    res.send(puzzle);
+    const shuffledLetters = [...puzzle.letters].sort(() => Math.random() - 0.5);
+
+    res.send({ ...puzzle, letters: shuffledLetters });
   } catch (e) {
     console.error(e);
     res.status(500).json({ error: "Internal server error" });
