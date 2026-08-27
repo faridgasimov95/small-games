@@ -4,7 +4,7 @@ const LETTER_COUNT = 7;
 const PUZZLES_NUMBER = 200;
 
 const MIN_WORDS = 24;
-const MAX_WORDS = 35;
+const MAX_WORDS = 45;
 
 function letterCounts(word: string): Record<string, number> {
   const counts: Record<string, number> = {};
