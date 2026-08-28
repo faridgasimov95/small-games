@@ -1,28 +1,27 @@
-import React, { useState } from "react";
-
 type WordsmithWordInputProps = {
+  value: string;
+  onChange: (value: string) => void;
   onSubmit: (word: string) => void;
   disabled?: boolean;
 };
 
 export default function WordsmithWordInput({
+  value,
+  onChange,
   onSubmit,
   disabled,
 }: WordsmithWordInputProps) {
-  const [value, setValue] = useState("");
-
   function handleSubmit(e: React.SubmitEvent) {
     e.preventDefault();
     if (!value.trim()) return;
     onSubmit(value.trim().toLowerCase());
-    setValue("");
   }
 
   return (
     <form onSubmit={handleSubmit} className="flex gap-2">
       <input
         value={value}
-        onChange={(e) => setValue(e.target.value)}
+        onChange={(e) => onChange(e.target.value)}
         disabled={disabled}
         className="font-mono bg-surface border border-divider text-text px-3 py-2 rounded"
         autoFocus

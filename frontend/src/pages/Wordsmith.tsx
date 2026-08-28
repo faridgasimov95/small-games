@@ -1,10 +1,12 @@
 import EndlessNextControls from "@/components/EndlessNextControls";
 import { useWordsmithGame } from "@/games/wordsmith/useWordsmithGame";
+import { isValidPartialGuess } from "@/games/wordsmith/utils";
 import WordsmithLettersBoard from "@/games/wordsmith/WordsmithLettersBoard";
 import WordsmithResultModal from "@/games/wordsmith/WordsmithResultModal";
 import WordsmithWordInput from "@/games/wordsmith/WordsmithWordInput";
 import WordsmithWordList from "@/games/wordsmith/WordsmithWordList";
 import type { Difficulty, Mode } from "@/types/game";
+import { useState } from "react";
 
 export default function WordsmithPage() {
   const {
@@ -25,6 +27,23 @@ export default function WordsmithPage() {
     handlePlayAgain,
     setShowModal,
   } = useWordsmithGame();
+
+  const [guessValue, setGuessValue] = useState("");
+
+  function handleGuessChange(newValue: string) {
+    if (isValidPartialGuess(newValue, currentPuzzle.letters)) {
+      setGuessValue(newValue);
+    }
+  }
+
+  function handleLetterClick(letter: string) {
+    handleGuessChange(guessValue + letter);
+  }
+
+  function handleSubmitGuess(word: string) {
+    handleWordGuess(word);
+    setGuessValue("");
+  }
 
   return (
     <>
@@ -48,9 +67,18 @@ export default function WordsmithPage() {
           {Math.floor(timeLeft / 60)}:{String(timeLeft % 60).padStart(2, "0")}
         </p>
 
-        <WordsmithLettersBoard letters={currentPuzzle.letters} />
+        <WordsmithLettersBoard
+          letters={currentPuzzle.letters}
+          onLetterClick={handleLetterClick}
+          disabled={readOnly}
+        />
 
-        <WordsmithWordInput onSubmit={handleWordGuess} disabled={readOnly} />
+        <WordsmithWordInput
+          value={guessValue}
+          onChange={handleGuessChange}
+          onSubmit={handleSubmitGuess}
+          disabled={readOnly}
+        />
 
         <WordsmithWordList foundWords={currentFoundWords} target={target} />
 

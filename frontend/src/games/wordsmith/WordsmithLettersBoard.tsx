@@ -2,10 +2,14 @@ import WordsmithLetterTile from "./WordsmithLetterTile";
 
 type WordsmithLettersBoardProps = {
   letters: string[];
+  onLetterClick?: (letter: string) => void;
+  disabled: boolean;
 };
 
 export default function WordsmithLettersBoard({
   letters,
+  onLetterClick,
+  disabled,
 }: WordsmithLettersBoardProps) {
   const radius = 80;
   const center = radius + 24;
@@ -19,7 +23,11 @@ export default function WordsmithLettersBoard({
 
         return (
           <div key={i} className="absolute" style={{ left: x, top: y }}>
-            <WordsmithLetterTile letter={letter} />
+            <WordsmithLetterTile
+              letter={letter}
+              onClick={() => onLetterClick?.(letter)}
+              disabled={disabled}
+            />
           </div>
         );
       })}

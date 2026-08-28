@@ -17,3 +17,18 @@ export function getBucketIndex(seconds: number): number {
   }
   return DAILY_TIME_BOUNDS.length + 1;
 }
+
+export function isValidPartialGuess(input: string, letters: string[]): boolean {
+  const available: Record<string, number> = {};
+  for (const l of letters) {
+    const key = l.toLowerCase();
+    available[key] = (available[key] ?? 0) + 1;
+  }
+
+  for (const ch of input.toLowerCase()) {
+    if (!available[ch]) return false;
+    available[ch]--;
+  }
+
+  return true;
+}
