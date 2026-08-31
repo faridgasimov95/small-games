@@ -22,6 +22,7 @@ export default function WordsmithPage() {
     streak,
     round,
     completionTime,
+    isShaking,
     handleWordGuess,
     handleNext,
     handlePlayAgain,
@@ -78,6 +79,7 @@ export default function WordsmithPage() {
           onChange={handleGuessChange}
           onSubmit={handleSubmitGuess}
           disabled={readOnly}
+          isShaking={isShaking}
         />
 
         <WordsmithWordList foundWords={currentFoundWords} target={target} />

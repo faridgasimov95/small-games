@@ -3,6 +3,7 @@ type WordsmithWordInputProps = {
   onChange: (value: string) => void;
   onSubmit: (word: string) => void;
   disabled?: boolean;
+  isShaking?: boolean;
 };
 
 export default function WordsmithWordInput({
@@ -10,6 +11,7 @@ export default function WordsmithWordInput({
   onChange,
   onSubmit,
   disabled,
+  isShaking,
 }: WordsmithWordInputProps) {
   function handleSubmit(e: React.SubmitEvent) {
     e.preventDefault();
@@ -23,7 +25,7 @@ export default function WordsmithWordInput({
         value={value}
         onChange={(e) => onChange(e.target.value)}
         disabled={disabled}
-        className="font-mono bg-surface border border-divider text-text px-3 py-2 rounded"
+        className={`font-mono bg-surface border border-divider text-text px-3 py-2 rounded ${isShaking ? "animate-shake" : ""}`}
         autoFocus
       />
       <button

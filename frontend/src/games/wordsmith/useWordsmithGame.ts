@@ -84,6 +84,7 @@ export function useWordsmithGame() {
   const [statsSaved, setStatsSaved] = useState(
     restoredCompletionTime !== undefined,
   );
+  const [isShaking, setIsShaking] = useState(false);
 
   const target = WORD_TARGETS[difficulty];
   const isSolved = currentFoundWords.length >= target;
@@ -202,10 +203,21 @@ export function useWordsmithGame() {
 
   function handleWordGuess(word: string) {
     if (readOnly) return;
-    if (currentFoundWords.includes(word)) return;
-    if (!currentPuzzle.words.includes(word)) return; // not a valid word
+    if (currentFoundWords.includes(word)) {
+      triggerShake();
+      return;
+    }
+    if (!currentPuzzle.words.includes(word)) {
+      triggerShake();
+      return;
+    }
 
     setCurrentFoundWords((prev) => [...prev, word]);
+  }
+
+  function triggerShake() {
+    setIsShaking(true);
+    setTimeout(() => setIsShaking(false), 500);
   }
 
   async function handleNext(
@@ -247,6 +259,7 @@ export function useWordsmithGame() {
     streak,
     round,
     completionTime,
+    isShaking,
     handleWordGuess,
     handleNext,
     handlePlayAgain,
