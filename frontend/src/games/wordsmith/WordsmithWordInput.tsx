@@ -29,7 +29,7 @@ export default function WordsmithWordInput({
       <button
         type="submit"
         disabled={disabled}
-        className="px-4 py-2 bg-accent text-bg font-mono text-sm cursor-pointer disabled:opacity-50"
+        className="px-4 py-2 bg-accent text-bg font-mono text-sm cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
       >
         Guess
       </button>
