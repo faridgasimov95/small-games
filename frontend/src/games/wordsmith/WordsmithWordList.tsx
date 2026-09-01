@@ -18,24 +18,22 @@ export default function WordsmithWordList({
       </p>
       <div className="flex flex-wrap gap-2 justify-center max-w-md">
         {foundWords.map((word) => (
-          <>
-            <span
-              key={word}
-              className="px-2 py-0.5 rounded-xl bg-surface-card font-mono text-xs text-text"
-              onClick={() => setActiveWord(word)}
-            >
-              {word.toUpperCase()}
-            </span>
-            {activeWord && (
-              <WordDefinitionModal
-                word={word}
-                game="wordsmith"
-                onClose={() => setActiveWord(null)}
-              />
-            )}
-          </>
+          <span
+            key={word}
+            className="px-2 py-0.5 rounded-xl bg-surface-card font-mono text-xs text-text"
+            onClick={() => setActiveWord(word)}
+          >
+            {word.toUpperCase()}
+          </span>
         ))}
       </div>
+      {activeWord && (
+        <WordDefinitionModal
+          word={activeWord}
+          game="wordsmith"
+          onClose={() => setActiveWord(null)}
+        />
+      )}
     </div>
   );
 }
