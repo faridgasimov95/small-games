@@ -1,6 +1,7 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import WordleRow from "./WordleRow";
 import { WORDLE_MAX_ATTEMPTS } from "./constants";
+import englishWords from "an-array-of-english-words";
 
 type WordleBoardProps = {
   hiddenWord: string;
@@ -8,6 +9,12 @@ type WordleBoardProps = {
   readOnly: boolean;
   onGuessSubmit: (guesses: string[]) => void;
 };
+
+const englishWordSet = new Set(englishWords);
+
+function isValidWord(word: string): boolean {
+  return englishWordSet.has(word.toLowerCase());
+}
 
 export default function WordleBoard({
   hiddenWord,
@@ -19,36 +26,42 @@ export default function WordleBoard({
   const [guesses, setGuesses] = useState<string[]>(initialGuesses);
   const [currentGuess, setCurrentGuess] = useState("");
   const [shakingRow, setShakingRow] = useState<number | null>(null);
-  const isSubmittingRef = useRef(false);
+  // const isSubmittingRef = useRef(false);
 
   useEffect(() => {
     if (readOnly) return;
 
-    async function handleKeyDown(e: KeyboardEvent) {
+    function handleKeyDown(e: KeyboardEvent) {
       if (/^[a-zA-Z]$/.test(e.key) && currentGuess.length < wordLength) {
         setCurrentGuess((prev) => prev + e.key.toLowerCase());
       } else if (e.key === "Backspace" && currentGuess.length > 0) {
         setCurrentGuess((prev) => prev.slice(0, -1));
       } else if (
         e.key === "Enter" &&
-        currentGuess.length === wordLength &&
-        !isSubmittingRef.current
+        currentGuess.length === wordLength
+        //&& !isSubmittingRef.current
       ) {
-        isSubmittingRef.current = true;
-        try {
-          const response = await fetch(
-            `https://api.dictionaryapi.dev/api/v2/entries/en/${currentGuess}`,
-          );
-          if (!response.ok) {
-            setShakingRow(guesses.length);
-            setTimeout(() => setShakingRow(null), 1000);
-            return;
-          }
-        } catch (err) {
-          console.error(err);
+        // isSubmittingRef.current = true;
+        // try {
+        //   const response = await fetch(
+        //     `https://api.dictionaryapi.dev/api/v2/entries/en/${currentGuess}`,
+        //   );
+        //   if (!response.ok) {
+        //     setShakingRow(guesses.length);
+        //     setTimeout(() => setShakingRow(null), 1000);
+        //     return;
+        //   }
+        // } catch (err) {
+        //   console.error(err);
+        //   return;
+        // } finally {
+        //   isSubmittingRef.current = false;
+        // }
+
+        if (!isValidWord(currentGuess)) {
+          setShakingRow(guesses.length);
+          setTimeout(() => setShakingRow(null), 1000);
           return;
-        } finally {
-          isSubmittingRef.current = false;
         }
 
         setGuesses((prev) => [...prev, currentGuess]);
