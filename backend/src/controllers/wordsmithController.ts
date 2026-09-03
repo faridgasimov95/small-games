@@ -8,16 +8,19 @@ import {
   loadJson,
   loadData,
   calculateEndlessStats,
+  writeData,
 } from "../utils/wordUtils";
 import {
   Difficulty,
   GlobalWordsmithStats,
   Mode,
   WordsmithPuzzle,
+  WordSuggestion,
 } from "../types/wordsmith";
 import {
   DAILY_WORDSMITH_PATH,
   WORDSMITH_STATS_PATH,
+  WORDSMITH_SUGGESTIONS_PATH,
 } from "../data/wordsmith/constants";
 
 export const fetchPuzzle = async (
@@ -113,6 +116,48 @@ export const fetchEndlessDistribution = async (
     res.send({ resultCounts });
   } catch (err) {
     console.log(err);
+    res.status(500).json({ error: "Internal server error" });
+  }
+};
+
+export const suggestWord = async (
+  req: Request,
+  res: Response,
+): Promise<void> => {
+  const { word, letters } = req.body;
+  const cleanWord = word?.trim().toLowerCase();
+
+  if (!cleanWord || cleanWord.length < 3) {
+    res.status(400).json({ error: "Word must be at least 3 letters long." });
+    return;
+  }
+
+  try {
+    let suggestions: WordSuggestion[] = [];
+
+    try {
+      suggestions = loadData<WordSuggestion[]>(WORDSMITH_SUGGESTIONS_PATH);
+    } catch {
+      suggestions = [];
+    }
+
+    const alreadySuggested = suggestions.some((s) => s.word === cleanWord);
+    if (alreadySuggested) {
+      res.status(200).json({ message: "Word has already been suggested." });
+      return;
+    }
+
+    suggestions.push({
+      word: cleanWord,
+      letters,
+      createdAt: new Date().toISOString(),
+    });
+
+    writeData(WORDSMITH_SUGGESTIONS_PATH, suggestions);
+
+    res.status(200).json({ message: "Suggestion saved successfully" });
+  } catch (e) {
+    console.error(e);
     res.status(500).json({ error: "Internal server error" });
   }
 };

@@ -3,6 +3,7 @@ import {
   fetchEndlessDistribution,
   fetchPuzzle,
   fetchStats,
+  suggestWord,
   updateStats,
 } from "../controllers/wordsmithController";
 
@@ -19,5 +20,6 @@ router.post("/puzzle", fetchPuzzle);
 router.post("/stats", updateStats);
 router.get("/stats", fetchStats);
 router.get("/distribution", fetchEndlessDistribution);
+router.post("/suggest", suggestWord);
 
 export default router;

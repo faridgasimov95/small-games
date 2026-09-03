@@ -65,3 +65,9 @@ export type DailyWordsmith = {
   mediumHistory: WordsmithPuzzle[];
   hardHistory: WordsmithPuzzle[];
 };
+
+export type WordSuggestion = {
+  word: string;
+  letters?: string[];
+  createdAt: string;
+};
