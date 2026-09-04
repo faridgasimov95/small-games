@@ -149,3 +149,8 @@ export function getWordForMode(
   }
   return word;
 }
+
+export function isAlreadyKnownWord(word: string): boolean {
+  const basis = loadJson<string>("wordsmith", "basis.json");
+  return basis.includes(word);
+}

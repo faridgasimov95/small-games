@@ -9,6 +9,7 @@ import {
   loadData,
   calculateEndlessStats,
   writeData,
+  isAlreadyKnownWord,
 } from "../utils/wordUtils";
 import {
   Difficulty,
@@ -126,6 +127,11 @@ export const suggestWord = async (
 ): Promise<void> => {
   const { word, letters } = req.body;
   const cleanWord = word?.trim().toLowerCase();
+
+  if (isAlreadyKnownWord(cleanWord)) {
+    res.status(200).json({ message: "Word is already recognized." });
+    return;
+  }
 
   if (!cleanWord || cleanWord.length < 3) {
     res.status(400).json({ error: "Word must be at least 3 letters long." });
