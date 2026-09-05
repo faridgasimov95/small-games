@@ -6,7 +6,9 @@ import WordsmithResultModal from "@/games/wordsmith/WordsmithResultModal";
 import WordsmithWordInput from "@/games/wordsmith/WordsmithWordInput";
 import WordsmithWordList from "@/games/wordsmith/WordsmithWordList";
 import type { Difficulty, Mode } from "@/types/game";
+import { postData as suggestWord } from "@/utils/api";
 import { useState } from "react";
+const API_URL = import.meta.env.VITE_API_URL;
 
 export default function WordsmithPage() {
   const {
@@ -23,13 +25,16 @@ export default function WordsmithPage() {
     round,
     completionTime,
     isShaking,
+    lastRejectedWord,
     handleWordGuess,
     handleNext,
     handlePlayAgain,
     setShowModal,
+    setLastRejectedWord,
   } = useWordsmithGame();
 
   const [guessValue, setGuessValue] = useState("");
+  const [notification, setNotification] = useState<string | null>(null);
 
   function handleGuessChange(newValue: string) {
     if (isValidPartialGuess(newValue, currentPuzzle.letters)) {
@@ -44,6 +49,18 @@ export default function WordsmithPage() {
   function handleSubmitGuess(word: string) {
     handleWordGuess(word);
     setGuessValue("");
+  }
+
+  async function handleSuggest() {
+    if (!lastRejectedWord) return;
+    const response = await suggestWord(`${API_URL}/wordsmith/suggest`, {
+      word: lastRejectedWord,
+      letters: currentPuzzle.letters,
+    });
+    const data = await response.json();
+    setNotification(data.message ?? data.error ?? "Something went wrong");
+    setLastRejectedWord(null);
+    setTimeout(() => setNotification(null), 3000);
   }
 
   return (
@@ -87,6 +104,14 @@ export default function WordsmithPage() {
         {params.mode === "endless" && endlessSolved && (
           <EndlessNextControls game="wordsmith" onNext={() => handleNext()} />
         )}
+        {lastRejectedWord && (
+          <button
+            onClick={handleSuggest}
+            className="font-mono text-xs text-text/70 underline cursor-pointer"
+          >
+            Suggest "{lastRejectedWord.toUpperCase()}" as a word?
+          </button>
+        )}
       </div>
 
       {showModal && (
@@ -101,6 +126,12 @@ export default function WordsmithPage() {
           onClose={() => setShowModal(false)}
           onPlayAgain={handlePlayAgain}
         />
+      )}
+
+      {notification && (
+        <div className="fixed bottom-4 px-4 py-2 bg-surface-card text-text font-mono text-sm rounded">
+          {notification}
+        </div>
       )}
     </>
   );

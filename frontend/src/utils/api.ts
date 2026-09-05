@@ -39,7 +39,7 @@ type EndlessStatsBody = {
 
 type WordsmithFetchBody = { usedPuzzles: WordsmithPuzzle[] };
 
-type WordsmithSuggestBody = { letters: string[]; word: string };
+type WordsmithSuggestBody = { word: string; letters: string[] };
 
 type PostBody =
   | WordFetchBody

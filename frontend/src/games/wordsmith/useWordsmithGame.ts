@@ -85,6 +85,7 @@ export function useWordsmithGame() {
     restoredCompletionTime !== undefined,
   );
   const [isShaking, setIsShaking] = useState(false);
+  const [lastRejectedWord, setLastRejectedWord] = useState<string | null>(null);
 
   const target = WORD_TARGETS[difficulty];
   const isSolved = currentFoundWords.length >= target;
@@ -208,10 +209,12 @@ export function useWordsmithGame() {
       return;
     }
     if (!currentPuzzle.words.includes(word)) {
+      setLastRejectedWord(word);
       triggerShake();
       return;
     }
 
+    setLastRejectedWord(null);
     setCurrentFoundWords((prev) => [...prev, word]);
   }
 
@@ -260,9 +263,11 @@ export function useWordsmithGame() {
     round,
     completionTime,
     isShaking,
+    lastRejectedWord,
     handleWordGuess,
     handleNext,
     handlePlayAgain,
     setShowModal,
+    setLastRejectedWord,
   };
 }
