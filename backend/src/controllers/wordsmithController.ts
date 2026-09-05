@@ -128,17 +128,17 @@ export const suggestWord = async (
   const { word, letters } = req.body;
   const cleanWord = word?.trim().toLowerCase();
 
-  if (isAlreadyKnownWord(cleanWord)) {
-    res.status(200).json({ message: "Word is already recognized." });
-    return;
-  }
-
   if (!cleanWord || cleanWord.length < 3) {
     res.status(400).json({ error: "Word must be at least 3 letters long." });
     return;
   }
 
   try {
+    if (isAlreadyKnownWord(cleanWord)) {
+      res.status(200).json({ message: "Word is already recognized." });
+      return;
+    }
+
     let suggestions: WordSuggestion[] = [];
 
     try {
