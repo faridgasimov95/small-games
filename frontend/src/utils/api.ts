@@ -39,11 +39,14 @@ type EndlessStatsBody = {
 
 type WordsmithFetchBody = { usedPuzzles: WordsmithPuzzle[] };
 
+type WordsmithSuggestBody = { letters: string[]; word: string };
+
 type PostBody =
   | WordFetchBody
   | DailyStatsBody
   | EndlessStatsBody
-  | WordsmithFetchBody;
+  | WordsmithFetchBody
+  | WordsmithSuggestBody;
 
 export async function postData(url: string, data?: PostBody) {
   const response = await fetch(url, {
